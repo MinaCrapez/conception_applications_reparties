@@ -3,25 +3,30 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
 
+
 public class ServeurFTP {
+
+
 
     private Socket socket;
     private ArrayList<ServeurFTP> threads;
+    private int port;
 
-    public ServeurFTP(Socket socket, ArrayList<ServeurFTP> threads){
+    public ServeurFTP(Socket socket, ArrayList<ServeurFTP> threads, int port){
         this.socket = socket;
         this.threads = threads;
+        this.port = port;
     }
 
     public static void main(String[] args) throws IOException{
         // initialisation
         ArrayList<ServeurFTP> threads = new ArrayList<>(); 
-
+        int port = Integer.parseInt(args[0]);
         // connexion
-        ServerSocket serverSocket = new ServerSocket(Integer.parseInt(args[0])); 
+        ServerSocket serverSocket = new ServerSocket(port); 
         Socket socket = serverSocket.accept(); 
        
-        ServeurFTP server = new ServeurFTP(socket,threads);
+        ServeurFTP server = new ServeurFTP(socket,threads,port);
         
         threads.add(server); 
         server.start(); 
@@ -32,6 +37,7 @@ public class ServeurFTP {
     }
 
     public void start() throws IOException {
+
         InputStream is = socket.getInputStream();
         OutputStream os = socket.getOutputStream();
     
@@ -41,10 +47,16 @@ public class ServeurFTP {
 
         // pour tous les threads :
         for(int i = 0; i < this.threads.size();i++){
-            dos.writeBytes("connected to localHost \r\n");
-            dos.writeBytes("Connect to host S, port L,\n establishing control connections.\n <---- 220 Service ready <CRLF>.");
-        }
-    } 
+            dos.writeBytes("Connect to host linux port "+this.port+ " establishing control connections.<---- 220 Service ready <CRLF>.");
+            
+            String msg = br.readLine();
+            Mdp mdp;
+            if(mdp.getMdp().containsValue(msg)){
+                dos.
+            }
+        } 
+
+    }
 }
 
 /*
