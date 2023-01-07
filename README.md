@@ -4,12 +4,9 @@
 
 
 -------------
+a faire :
 
-a faire : 
-
-- le serveur doit pouvoir permettre de s'identifier et de rentrer son mdp
-bug au while (true), le premier print se fait sans soucis mais on a toujours le retour "invalid command" en voulant entrer du texte apres. 
-
+- reussir a faire le quit 
 
 amelioration a faire :
 - penser à faire les min et max de threads et continuer leur gestion (en commentaire pour le moment)
@@ -30,4 +27,7 @@ java ServeurFTP
 2eme terminal :
 ``` 
 ftp localhost 1024
+
+pour des tests sur un client tcp :
+nc -n localhost:1024
 ```
