@@ -72,6 +72,18 @@ public class ServeurFTP {
                     motDePasse(msg, username);
                 }
 
+                else if(msg.startsWith("get")){
+                    commandGet(msg);
+                }
+                else if(msg.startsWith("put")){
+                    commandPut(msg);
+                }
+                else if(msg.startsWith("cd")){
+                    commandCd(msg);
+                }
+                else if(msg.startsWith("dir")){
+                    commandDir(msg);
+                }
                 else {
                     write ("<CRLF>----> <---- 502 command not implemented <CRLF>.");
                 }
@@ -79,21 +91,12 @@ public class ServeurFTP {
         }
 
     } 
-    public void close() throws IOException {
-        write("<CRLF>----> <---- 221 logout <CRLF>.");
-        printer.close();
-        br.close();
-        socket.close(); 
-        isOpen = false;
-
-        
-    }
 
     public String authentification(String message) throws IOException {
         String res = null;
         String[] msgSplit = message.split(" ");
         String username = msgSplit[1];
-        String returnMsg = "error <CRLF>----><----430 inexisting username";
+        String returnMsg = "error <CRLF>----><----430 inexisting username<CRLF>.";
 
         for (Identification ident : Identification.values()) {
             if (ident.getUsername().equals(username)) {
@@ -117,9 +120,64 @@ public class ServeurFTP {
                 logIn = true;
             }
         }
-        write(returnMsg);
-        
+        write(returnMsg);     
     }
+
+    public void close() throws IOException {
+        write("<CRLF>----> <---- 221 logout <CRLF>.");
+        printer.close();
+        br.close();
+        socket.close(); 
+        isOpen = false; 
+    }
+
+    public void commandGet(String message) throws IOException {
+        write("A CORRIGER");
+        // copier un fichier message en local
+
+        // message si tout va bien : 250, action sur le fichier effectuée avec succès
+        // sinon :  451 action requise arreté, erreur local dans le traitement
+
+        // 532 si on s'est pas connecté avant 
+
+        String[] msgSplit = message.split(" ");
+        String remoteFile = msgSplit[1];
+        String localFile = "remoteFile";
+        if(msgSplit.length > 1) {
+            localFile = msgSplit[2];
+        }
+        File src = new File(remoteFile);
+        File dest = new File(localFile);
+
+        InputStream is = new FileInputStream(src);
+        OutputStream os  = new FileOutputStream(dest);
+
+        byte[] buffer = new byte[1024];
+        int len;
+        while ((len = is.read(buffer)) > 0) {
+            os.write(buffer, 0, len);
+        }
+        is.close();
+        os.close();
+
+
+    }
+
+
+    public void commandPut(String message) {
+        write("TO DO");
+    }
+
+
+    public void commandCd(String message) {
+        write("TO DO");
+    }
+
+
+    public void commandDir(String message) {
+        write("TO DO");
+    }
+
 }
 
 
