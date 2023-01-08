@@ -6,13 +6,12 @@ import java.util.*;
 public class ServeurFTP {
 
     protected Socket socket;
+    private ArrayList<ServeurFTP> threads;
     protected int port;
     protected Boolean isOpen;
-    private ArrayList<ServeurFTP> threads;
+    protected Boolean logIn;
     protected BufferedReader br;
     protected PrintWriter printer;
-    protected Map<String, String> mdp;
-    protected Boolean logIn;
     
 
     public ServeurFTP(Socket socket, ArrayList<ServeurFTP> threads, int port) throws IOException{
@@ -28,9 +27,6 @@ public class ServeurFTP {
         this.br = new BufferedReader(isr);
 
         this.printer = new PrintWriter(os,true);
-
-        this.mdp = new HashMap<String, String>();
-        this.mdp.put("test","test");
     }
 
     public static void main(String[] args) throws IOException{
@@ -69,18 +65,22 @@ public class ServeurFTP {
                 if (msg.startsWith("quit")) {
                     close();
                 }
-                if(msg.startsWith("username")){
+                else if(msg.startsWith("username")){
                     username = authentification(msg);
                 }
-                if(msg.startsWith("password")){
+                else if(msg.startsWith("password")){
                     motDePasse(msg, username);
+                }
+
+                else {
+                    write ("<CRLF>----> <---- 502 command not implemented <CRLF>.");
                 }
             } 
         }
 
     } 
     public void close() throws IOException {
-        write("on ferme");
+        write("<CRLF>----> <---- 221 logout <CRLF>.");
         printer.close();
         br.close();
         socket.close(); 
@@ -90,32 +90,35 @@ public class ServeurFTP {
     }
 
     public String authentification(String message) throws IOException {
-        String res;
+        String res = null;
         String[] msgSplit = message.split(" ");
         String username = msgSplit[1];
-        if(this.mdp.containsKey(username)) {
-            write("USER "+username+" <CRLF>----> <---- 331 User name ok, need password<CRLF>.");
-            res = username;
+        String returnMsg = "error <CRLF>----><----430 inexisting username";
+
+        for (Identification ident : Identification.values()) {
+            if (ident.getUsername().equals(username)) {
+                returnMsg = "USER "+username+" <CRLF>----> <---- 331 User name ok, need password<CRLF>.";
+                res = username;
+            }
         }
-        else{
-            write("TROUVER LE CODE ERREUR");
-            res = null;
-        }
+        write (returnMsg);
         return res;
     } 
 
     public void motDePasse(String message, String username) throws IOException {
-        if(message.startsWith("password")){
-            String[] msgSplit = message.split(" ");
-		    String password = msgSplit[1];
-            if(username != null && this.mdp.get(username).equals(password)) { //si le mot de passe correspond au username rentré
-                write("PASS "+password+"<CRLF>----><---- 230 User logged in<CRLF>.");
+        String[] msgSplit = message.split(" ");
+        String password = msgSplit[1];
+
+        String returnMsg = "error <CRLF>----><----430 wrong password";
+
+        for (Identification ident : Identification.values()) {
+            if(username != null && ident.getUsername().equals(username) && ident.getMotDePasse().equals(password)) {
+                returnMsg = "PASS "+password+"<CRLF>----><---- 230 User logged in<CRLF>.";
                 logIn = true;
             }
-            else{
-                write("error <CRLF>----><----530 wrong password");
-            } 
-        } 
+        }
+        write(returnMsg);
+        
     }
 }
 
