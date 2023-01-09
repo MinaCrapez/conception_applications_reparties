@@ -49,10 +49,11 @@ public class ServeurFTP {
 
         threads.add(server); 
 
-        server.start(); 
+        server.start();
 
         // on ferme les connexion
         serverSocket.close();
+        socket.close();
     }
 
     /**
@@ -77,6 +78,7 @@ public class ServeurFTP {
                 String msg = br.readLine();
                 if (msg.startsWith("quit")) {
                     close();
+                    return;
                 }
                 else if(msg.startsWith("username")){
                     username = authentification(msg);
@@ -157,25 +159,31 @@ public class ServeurFTP {
         write("<CRLF>----> <---- 221 logout <CRLF>.");
         printer.close();
         br.close();
-        socket.close(); 
+        Thread.currentThread().interrupt();
         isOpen = false; 
     }
 
+    /**
+     * copy a file
+     * @param message the file we want to copy and, not necessary, the new file we want (remoteFile if not given)
+     * @throws IOException
+     */
     public void commandGet(String message) throws IOException {
-        write("A CORRIGER");
-        // copier un fichier message en local
-
-        // message si tout va bien : 250, action sur le fichier effectuée avec succès
-        // sinon :  451 action requise arreté, erreur local dans le traitement
-
-        // 532 si on s'est pas connecté avant 
-
+        if(!logIn) {
+            write("<CRLF>----> <---- 532 please identify before execute this action <CRLF>.");
+            return;
+        }
         String[] msgSplit = message.split(" ");
+        if(msgSplit.length <= 1) {
+            write("this command need a parameter");
+            return;
+        }
         String remoteFile = msgSplit[1];
         String localFile = "remoteFile";
-        if(msgSplit.length > 1) {
+        if(msgSplit.length > 2) {
             localFile = msgSplit[2];
-        }
+        } 
+        try {
         File src = new File(remoteFile);
         File dest = new File(localFile);
 
@@ -190,9 +198,14 @@ public class ServeurFTP {
         is.close();
         os.close();
 
+        write("<CRLF>----> <---- 250 the file as well been copied <CRLF>.");
+        }
+        catch (IOException e) {
+            write("<CRLF>----> <---- 451 action stopped. local error in the traitement<CRLF>.");
+        }
+
 
     }
-
 
     public void commandPut(String message) {
         write("TO DO");
