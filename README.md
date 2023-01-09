@@ -18,12 +18,12 @@ amelioration a faire :
 
 1er terminal :
 ```
-javac ServeurFTP.java
-
-java ServeurFTP 1024 
-OU
+make ServeurFTP;
+cd src;
 java ServeurFTP
 ```
+
+
 
 2eme terminal :
 ``` 

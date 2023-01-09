@@ -4,22 +4,27 @@ import java.net.Socket;
 import java.util.*;
 
 public class ServeurFTP {
+    /**
+     * ServeurFTP is a class representing a server FTP with its caracteristics and some commands
+     * 09/01/23
+     * Mina Crapez - M1 MIAGE
+     */
 
-    protected Socket socket;
-    private ArrayList<ServeurFTP> threads;
-    protected int port;
-    protected Boolean isOpen;
-    protected Boolean logIn;
-    protected BufferedReader br;
-    protected PrintWriter printer;
+    protected Socket socket; // a socket to access the server
+    private ArrayList<ServeurFTP> threads; // the list of threads, a thread is a connexion by a user
+    protected int port; // the integer using as a port to connect the server
+    protected Boolean isOpen; // a boolean representing if the server is closed or opened
+    protected Boolean logIn; // a boolean representing if a client is connected or not
+    protected BufferedReader br; // a bufferedReader to read the command enter by the user
+    protected PrintWriter printer;// a printer to print the result of the server
     
 
     public ServeurFTP(Socket socket, ArrayList<ServeurFTP> threads, int port) throws IOException{
         this.socket = socket;
-        this.threads = threads;
-        this.port = port;
+        this.threads = threads; 
+        this.port = port; 
         this.isOpen = true;
-        this.logIn = false;
+        this.logIn = false; 
 
         InputStream is = socket.getInputStream();
         InputStreamReader isr = new InputStreamReader(is);
@@ -50,10 +55,18 @@ public class ServeurFTP {
         serverSocket.close();
     }
 
+    /**
+     * write the answer of the server
+     * @param message the message the server as to write
+     */
     public void write (String message) {
         printer.println(message);
     }
 
+    /**
+     * while the server is open, a user can write a command and this function tell the programm how to respond
+     * @throws IOException
+     */
     public void start() throws IOException {
         // pour tous les threads :
         for(int i = 0; i < this.threads.size();i++){
@@ -92,6 +105,12 @@ public class ServeurFTP {
 
     } 
 
+    /**
+     * while a username is given, the server will answer
+     * @param message the username given by a user
+     * @return the answer of the programme with a username given
+     * @throws IOException
+     */
     public String authentification(String message) throws IOException {
         String res = null;
         String[] msgSplit = message.split(" ");
@@ -108,6 +127,12 @@ public class ServeurFTP {
         return res;
     } 
 
+    /**
+     * while a password is given, the server will answer
+     * @param message the password given by a user
+     * @return the answer of the programme with a password given
+     * @throws IOException
+     */
     public void motDePasse(String message, String username) throws IOException {
         String[] msgSplit = message.split(" ");
         String password = msgSplit[1];
@@ -123,6 +148,11 @@ public class ServeurFTP {
         write(returnMsg);     
     }
 
+
+    /**
+     * the server is closed when the command "quit" is given by a user
+     * @throws IOException
+     */
     public void close() throws IOException {
         write("<CRLF>----> <---- 221 logout <CRLF>.");
         printer.close();
