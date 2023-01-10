@@ -1,3 +1,4 @@
+package tool;
 public enum Identification {
     /**
      * Identification is an enumaration with the username and password of users for the serveur FTP

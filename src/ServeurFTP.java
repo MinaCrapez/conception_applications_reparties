@@ -1,7 +1,13 @@
 import java.io.*;
+import java.lang.reflect.InvocationTargetException;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.*;
+
+import command.CommandUsername;
+import tool.Identification;
+import command.CommandPassword;
+import command.Command;
 
 public class ServeurFTP {
     /**
@@ -34,7 +40,7 @@ public class ServeurFTP {
         this.printer = new PrintWriter(os,true);
     }
 
-    public static void main(String[] args) throws IOException{
+    public static void main(String[] args) throws IOException, ClassNotFoundException, InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException{
         // initialisation
         ArrayList<ServeurFTP> threads = new ArrayList<>(); 
         int port = 1024;
@@ -67,8 +73,15 @@ public class ServeurFTP {
     /**
      * while the server is open, a user can write a command and this function tell the programm how to respond
      * @throws IOException
+     * @throws ClassNotFoundException
+     * @throws IllegalAccessException
+     * @throws InstantiationException
+     * @throws SecurityException
+     * @throws NoSuchMethodException
+     * @throws InvocationTargetException
+     * @throws IllegalArgumentException
      */
-    public void start() throws IOException {
+    public void start() throws IOException, ClassNotFoundException, InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException {
         // pour tous les threads :
         for(int i = 0; i < this.threads.size();i++){
             write("Connect to host Linux, port "+port+",establishing control connections. <---- 220 Service ready <CRLF>.");
@@ -76,6 +89,19 @@ public class ServeurFTP {
             String username = null;
             while (isOpen) { 
                 String msg = br.readLine();
+                // TEST
+                String[] msgSplit = msg.split(" ");
+                String commandAsk = msgSplit[0];
+                String commandAskMaj=commandAsk.replaceFirst(".",(commandAsk.charAt(0)+"").toUpperCase());
+                String message = msgSplit[1];
+                String nameClass = "Command"+commandAskMaj;
+                Class<?> commandGiven = Class.forName("command."+nameClass);
+                Command Command = (Command) commandGiven.getConstructor().newInstance();
+                write(Command.run(message));
+
+
+                ///////////////////
+/* 
                 if (msg.startsWith("quit")) {
                     close();
                     return;
@@ -101,7 +127,7 @@ public class ServeurFTP {
                 }
                 else {
                     write ("<CRLF>----> <---- 502 command not implemented <CRLF>.");
-                }
+                } */
             } 
         }
 
