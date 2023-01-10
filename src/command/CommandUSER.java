@@ -1,14 +1,14 @@
 package command;
 import tool.Identification;
 
-public class CommandUsername extends Command{
+public class CommandUSER extends Command{
     /**
      * class representing the command username for the FTP Server
      * 10/01/23
      * Mina Crapez - M1 MIAGE
      */
 
-    public CommandUsername() {
+    public CommandUSER() {
         super();
     }
 

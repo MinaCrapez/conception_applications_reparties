@@ -1,9 +1,9 @@
 package command;
 
-public class CommandQuit extends Command{
+public class CommandQUIT extends Command{
     
 
-    public CommandQuit() {
+    public CommandQUIT() {
         super();
     }
 

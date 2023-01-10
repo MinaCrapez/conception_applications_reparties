@@ -4,11 +4,11 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.*;
 
-import command.CommandUsername;
 import tool.Identification;
-import command.CommandPassword;
-import command.CommandGet;
-import command.CommandQuit;
+import command.CommandUSER;
+import command.CommandPASS;
+import command.CommandGET;
+import command.CommandQUIT;
 import command.Command;
 
 public class ServeurFTP {
@@ -94,7 +94,7 @@ public class ServeurFTP {
 
                 String[] msgSplit = msg.split(" ");
                 String commandAsk = msgSplit[0];
-                String commandAskMaj=commandAsk.replaceFirst(".",(commandAsk.charAt(0)+"").toUpperCase());
+                //String commandAskMaj=commandAsk.replaceFirst(".",(commandAsk.charAt(0)+"").toUpperCase());
                 
                 // gestion des commande sans paramètre
                 String message = "";
@@ -102,20 +102,21 @@ public class ServeurFTP {
                     message = msgSplit[1];
                 }
         
-                String nameClass = "Command"+commandAskMaj;
+                String nameClass = "Command"+commandAsk;
                 try{
                 Class<?> commandGiven = Class.forName("command."+nameClass);
                 Command Command = (Command) commandGiven.getConstructor().newInstance();
 
                 // test du password correspondant au username 
-                if(nameClass.equals("CommandUsername")) {
+                if(nameClass.equals("CommandUSER")) {
                     write(Command.run(message));
                     username = message;
                 }
-                else if(nameClass.equals("CommandPassword")) {
+                else if(nameClass.equals("CommandPASS")) {
                     write(Command.run(username+" "+message));
                 }
-                else if (nameClass.equals("CommandQuit")) {
+                // gestion special du quit qui quitte la fonction
+                else if (nameClass.equals("CommandQUIT")) {
                     write (Command.run(message));
                     close();
                     return;

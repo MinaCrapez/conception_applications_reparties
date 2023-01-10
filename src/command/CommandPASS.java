@@ -2,14 +2,14 @@ package command;
 
 import tool.Identification;
 
-public class CommandPassword extends Command{
+public class CommandPASS extends Command{
     /**
      * class representing the command password for the FTP Server
      * 10/01/23
      * Mina Crapez - M1 MIAGE
      */
 
-    public CommandPassword() {
+    public CommandPASS() {
         super();
     }
 

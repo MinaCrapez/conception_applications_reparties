@@ -2,14 +2,14 @@ package command;
 
 import java.io.*;
 
-public class CommandGet extends Command{
+public class CommandGET extends Command{
     /**
      * class representing the command get for the FTP Server
      * 10/01/23
      * Mina Crapez - M1 MIAGE
      */
 
-    public CommandGet() {
+    public CommandGET() {
         super();
     }
 
