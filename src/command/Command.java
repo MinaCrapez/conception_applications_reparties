@@ -1,14 +1,16 @@
 package command;
+
 abstract public class Command {
-
-    protected String commandAsk;
-
+    /**
+     * abstract classe representing a command for the FTP Server
+     * 10/01/23
+     * Mina Crapez - M1 MIAGE
+     */
 
     public Command() {
-        //this.commandAsk = commandAsk;
     }
 
-    abstract public String run(String commandAsk);
+    abstract public String run(String commandAsk); 
 
 
     

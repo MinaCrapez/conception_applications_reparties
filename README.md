@@ -6,14 +6,15 @@
 -------------
 a faire :
 
-- reussir a faire le quit 
-- continuer le get
+- verifier si c'est bien ce qu'il faut faire au get
+- corriger le bug du quit
+- continuer les autres commandes
 
 amelioration a faire :
 - penser à faire les min et max de threads et continuer leur gestion 
 - faire un readme propre
 - faire une FTPexception
-- mettre les bons messages d'erreurs avec les exception (try catch et pas throw IOException dans la decla juste)
+- mettre les bons messages d'erreurs avec les exception (try catch)
 - commenter les classes et les fonctions 
 
 1er terminal :
