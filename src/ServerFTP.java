@@ -57,10 +57,7 @@ public class ServerFTP{
     }
 
     public void start() throws IOException {
-        Map<String,String> logs = new HashMap<>();
-        logs.put("test", "test");
-        logs.put("mina", "mdp");
-
+    
         String username = "";
 
         System.out.println("Connect to host Linux, port "+port+",establishing control connections.");
@@ -93,10 +90,14 @@ public class ServerFTP{
             else if(commandAsk.startsWith("SYST")) {
                 commandSyst();
             }
+
+            else if(commandAsk.startsWith("QUIT")) {
+                commandQuit();
+                return;
+            }
         }
 
     }
-
 
     public void commandUser(String username) throws IOException {
         String returnMsg = "430 inexisting username<CRLF>.\r\n";
@@ -110,9 +111,6 @@ public class ServerFTP{
     }
 
     public void commandPass(String usernamePassword) throws IOException {
-       // System.out.println("user login with username :"+username+". Need password");
-        //dos.writeBytes("331 User name ok, need password\r\n");
-
         String returnMsg = "430 wrong password\r\n";
         String[] usernamePasswordSplit = usernamePassword.split(" ");
         String username = usernamePasswordSplit[0];
@@ -127,8 +125,24 @@ public class ServerFTP{
         dos.writeBytes(returnMsg); 
     }
 
-    public void commandSyst() {
-        
+    public void commandSyst()  throws IOException {
+        System.out.println("Envoi de l'OS");
+        dos.writeBytes("215 UNIX\r\n");
+    }
+
+    public void commandQuit() throws IOException {
+        System.out.println("deconnexion");
+        dos.writeBytes("215 UNIX\r\n");
+
+        logIn = false;
+
+        isr.close();
+        br.close();
+        dos.close();
+        is.close();
+        os.close();
+        socket.close();
+
     }
 
 }
