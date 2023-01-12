@@ -15,7 +15,7 @@ amelioration a faire :
 - faire un readme propre
 - faire une FTPexception
 - mettre les bons messages d'erreurs avec les exception (try catch)
-- commenter les classes et les fonctions 
+- sécuriser avec plusieurs utilisateur (synchronised, voir cours)
 
 1er terminal :
 ```
