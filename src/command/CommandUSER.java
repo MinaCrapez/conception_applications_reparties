@@ -19,11 +19,12 @@ public class CommandUSER extends Command{
      * @throws IOException
      */
     public String run(String username){
-        String returnMsg = "error <CRLF>----><----430 inexisting username<CRLF>.";
+        String returnMsg = "430 inexisting username<CRLF>.\r\n";
 
         for (Identification ident : Identification.values()) {
             if (ident.getUsername().equals(username)) {
-                returnMsg = "USER "+username+" <CRLF>----> <---- 331 User name ok, need password<CRLF>.";
+                System.out.println("user login with username :"+username+". Need password");
+                returnMsg = "331 User name ok, need password\r\n";
             }
         }
         return returnMsg;

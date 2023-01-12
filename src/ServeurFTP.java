@@ -25,6 +25,8 @@ public class ServeurFTP {
     protected Boolean logIn; // a boolean representing if a client is connected or not
     protected BufferedReader br; // a bufferedReader to read the command enter by the user
     protected PrintWriter printer;// a printer to print the result of the server
+    protected  OutputStream os;
+    protected DataOutputStream dos;
     
 
     public ServeurFTP(Socket socket, ArrayList<ServeurFTP> threads, int port) throws IOException{
@@ -37,9 +39,11 @@ public class ServeurFTP {
         InputStream is = socket.getInputStream();
         InputStreamReader isr = new InputStreamReader(is);
         OutputStream os = socket.getOutputStream();
+        DataOutputStream dos = new DataOutputStream(os);
+
         this.br = new BufferedReader(isr);
 
-        this.printer = new PrintWriter(os,true);
+        //this.printer = new PrintWriter(os,true);
     }
 
     public static void main(String[] args) throws IOException, ClassNotFoundException, InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException{
@@ -67,9 +71,10 @@ public class ServeurFTP {
     /**
      * write the answer of the server
      * @param message the message the server as to write
+     * @throws IOException
      */
-    public void write (String message) {
-        printer.println(message);
+    public void write (String message) throws IOException {
+        dos.writeBytes(message);
     }
 
     /**
@@ -86,7 +91,8 @@ public class ServeurFTP {
     public void start() throws IOException, ClassNotFoundException, InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException {
         // pour tous les threads :
         for(int i = 0; i < this.threads.size();i++){
-            write("Connect to host Linux, port "+port+",establishing control connections. <---- 220 Service ready <CRLF>.");
+            System.out.println("Connect to host Linux, port "+port+",establishing control connections.");
+            dos.writeBytes("220 Service ready \r\n");
 
             String username = "";
             while (isOpen) { 
@@ -94,7 +100,6 @@ public class ServeurFTP {
 
                 String[] msgSplit = msg.split(" ");
                 String commandAsk = msgSplit[0];
-                //String commandAskMaj=commandAsk.replaceFirst(".",(commandAsk.charAt(0)+"").toUpperCase());
                 
                 // gestion des commande sans paramètre
                 String message = "";
@@ -106,6 +111,7 @@ public class ServeurFTP {
                 try{
                 Class<?> commandGiven = Class.forName("command."+nameClass);
                 Command Command = (Command) commandGiven.getConstructor().newInstance();
+                Command.setOutput(this.os);
 
                 // test du password correspondant au username 
                 if(nameClass.equals("CommandUSER")) {
@@ -114,9 +120,11 @@ public class ServeurFTP {
                 }
                 else if(nameClass.equals("CommandPASS")) {
                     write(Command.run(username+" "+message));
+                    logIn = true;
                 }
                 // gestion special du quit qui quitte la fonction
                 else if (nameClass.equals("CommandQUIT")) {
+                    logIn = false;
                     write (Command.run(message));
                     close();
                     return;
@@ -126,14 +134,14 @@ public class ServeurFTP {
                 }
                 }
                 catch (ClassNotFoundException e) {
-                    write ("<CRLF>----> <---- 502 command not implemented <CRLF>.");
+                    write ("502 command not implemented\r\n");
                 }
             }
         }
     }
 
     /**
-     * the server is closed when the command "quit" is given by a user
+     * the server is closed when the command "QUIT" is given by a user
      * @throws IOException
      */
     public void close() throws IOException {

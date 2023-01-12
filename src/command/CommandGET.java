@@ -19,6 +19,8 @@ public class CommandGET extends Command{
      * @throws IOException
      */
     public String run(String file){
+        
+
         String[] msgSplit = file.split(" ");
         String remoteFile = msgSplit[0];
         String localFile = "remoteFile";
@@ -27,19 +29,20 @@ public class CommandGET extends Command{
         } 
         try {
         
-            File src = new File(remoteFile);
-            File dest = new File(localFile);
+            File src = new File("test/"+remoteFile);
+            //File dest = new File("test/"+localFile);
 
             InputStream is = new FileInputStream(src);
-            OutputStream os  = new FileOutputStream(dest);
+            //OutputStream os  = new FileOutputStream(dest);
+            OutputStream os = output; // l'output de la socket du serveur
 
             byte[] buffer = new byte[1024];
             int len;
             while ((len = is.read(buffer)) > 0) {
                 os.write(buffer, 0, len);
-            }
+            } 
             is.close();
-            os.close();
+            //os.close();
 
             return("<CRLF>----> <---- 250 the file as well been copied <CRLF>.");
         }

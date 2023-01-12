@@ -20,14 +20,15 @@ public class CommandPASS extends Command{
      * @throws IOException
      */
     public String run(String usernamePassword){
-        String returnMsg = "error <CRLF>----><----430 wrong password <CRLF>.";
+        String returnMsg = "430 wrong password\r\n";
         String[] usernamePasswordSplit = usernamePassword.split(" ");
         String username = usernamePasswordSplit[0];
         String password = usernamePasswordSplit[1];
 
         for (Identification ident : Identification.values()) {
             if(username != null && ident.getUsername().equals(username) && ident.getMotDePasse().equals(password)) {
-                returnMsg = "PASS "+password+"<CRLF>----><---- 230 User logged in<CRLF>.";
+                System.out.println("user login with username "+username+" and password "+password);
+                returnMsg = "230 User logged in \r\n";
             }
         } 
         return(returnMsg); 
