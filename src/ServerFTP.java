@@ -1,7 +1,9 @@
 import java.io.BufferedReader;
+import java.io.DataOutput;
 import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -110,14 +112,16 @@ public class ServerFTP{
                 String p2 = portSplit[5];
         
                 int port_TCP = Integer.parseInt(p1) * 256 + Integer.parseInt(p2);
-                String ip = h1+h2+h3+h4;
+                String ipEnvoie = h1+"."+h2+"."+h3+"."+h4;
 
-                ServerSocket serverSocketEnvoie = new ServerSocket(port_TCP); 
-                socketEnvoie = serverSocketEnvoie.accept();
+                Socket socketEnvoie = new Socket(ipEnvoie, port_TCP);
         
             }
             else if(commandAsk.startsWith("RETR")) {
                 commandPort(message);
+            }
+            else if(commandAsk.startsWith("GET")){
+                commandGet(message);
             }
             else {
                 dos.writeBytes("502 command not implemented\r\n");
@@ -174,56 +178,29 @@ public class ServerFTP{
 
     public void commandPort(String port) throws IOException {
         System.out.println(port);
-        //port_TCP = p1 * 256 + p2
-        // (h1,h2,h3,h4,p1,p2)
-        String[] portSplit = port.split(",");
-        
-        String h1 = portSplit[0];
-        String h2 = portSplit[1];
-        String h3 = portSplit[2];
-        String h4 = portSplit[3];
-        String p1 = portSplit[4];
-        String p2 = portSplit[5];
-
-        int port_TCP = Integer.parseInt(p1) * 256 + Integer.parseInt(p2);
-        String ip = h1+h2+h3+h4;
-
-        System.out.println("LE PORT DE LA SOCKET SERA "+ port_TCP);
-        System.out.println("LIP DE LA SOCKET SERA "+ ip);
-
         dos.writeBytes("200 Command okay.\r\n");
         // creer une nouvelle socket qui se connecte à port_TCP avec l'ip h1 h2 h3 h4
     }
 
-    public void commandRetr(String file) {
-
+    public void commandRetr(String file) throws IOException {
+        System.out.println("telechargement de "+file);
+        dos.writeBytes("150 File status okay; about to open data connection.\r\n");
     }
 
-   /*  public void commandGet(String file) throws IOException {
-        String[] msgSplit = file.split(" ");
-        String remoteFile = msgSplit[0];
-        String localFile = "remoteFile";
-        if(msgSplit.length > 1) {
-            localFile = msgSplit[0];
+    public void commandGet(String file) throws IOException {
+        File src = new File("test/"+file);
+
+        InputStream is = new FileInputStream(src);
+        OutputStream outputEnvoie = socketEnvoie.getOutputStream();
+
+        byte[] buffer = new byte[1024];
+        int len;
+        while ((len = is.read(buffer)) > 0) {
+            outputEnvoie.write(buffer, 0, len);
         } 
-        try {
-            File src = new File("test/"+remoteFile);
-
-            InputStream is = new FileInputStream(src);
-
-            byte[] buffer = new byte[1024];
-            int len;
-            while ((len = is.read(buffer)) > 0) {
-                os.write(buffer, 0, len);
-            } 
-            is.close();
-            //os.close();
-
-            dos.writeBytes("250 the file as well been copied");
-        }
-        catch (IOException e) {
-            dos.writeBytes("451 action stopped. local error in the traitement");
-        }
-    } */
+        is.close();
+        outputEnvoie.close();
+        dos.writeBytes("250 the file as well been copied");
+    }
 
 }

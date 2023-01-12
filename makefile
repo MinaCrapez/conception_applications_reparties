@@ -1,10 +1,10 @@
-all : serveurFTP
+all : serverFTP
 
 doc :
 	javadoc src/*.java -d docs;
 
-serveurFTP : 
-	cd src;javac ServeurFTP.java 
+serverFTP : 
+	cd src;javac ServerFTP.java 
 
 clean : 
 	rm -rf docs; cd src; rm -f *.class; cd command; rm -f *.class; cd ../tool; rm -f *.class;
