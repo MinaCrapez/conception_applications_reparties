@@ -18,11 +18,17 @@ import tool.Identification;
 
 public class ServerFTP{
 
-    protected Socket socket;
-    protected Socket socketEnvoie;
-    protected int port;
-    protected Boolean isOpen;
-    protected Boolean logIn;
+     /**
+     * ServerFTP is a class representing a server FTP with its caracteristics and some commands
+     * 09/01/23
+     * Mina Crapez - M1 MIAGE
+     */
+
+    protected Socket socket; // a socket to access the server
+    protected Socket socketEnvoie; // a socket to get data
+    protected int port; // the integer using as a port to connect the server
+    protected Boolean isOpen; // a boolean representing if the server is closed or opened
+    protected Boolean logIn; // a boolean representing if a client is connected or not
     protected InputStream is;
     protected OutputStream os;
     protected InputStreamReader isr;
@@ -59,8 +65,11 @@ public class ServerFTP{
         socket.close();
     }
 
+    /*
+     * start the server, a user can use some implemented commands 
+     * @throws IOException
+    */
     public void start() throws IOException {
-    
         String username = "";
 
         System.out.println("Connect to host Linux, port "+port+",establishing control connections.");
@@ -77,23 +86,18 @@ public class ServerFTP{
             String message = "";
             if(msgSplit.length > 1) {
                 message = msgSplit[1];
-            }
-
-            
+            }     
             if(commandAsk.startsWith("USER")) {
                 commandUser(message);
                 username = message;
             }
-
             else if(commandAsk.startsWith("PASS")) {
                 commandPass(username+" "+message);
                 logIn = true;
             }
-
             else if(commandAsk.startsWith("SYST")) {
                 commandSyst();
             }
-
             else if(commandAsk.startsWith("QUIT")) {
                 commandQuit();
                 return;
@@ -130,6 +134,11 @@ public class ServerFTP{
 
     }
 
+    /**
+     * this function permits to the server to answer to the USER command for authentification
+     * @param username the username we want to connect
+     * @throws IOException
+     */
     public void commandUser(String username) throws IOException {
         String returnMsg = "430 inexisting username<CRLF>.\r\n";
         for (Identification ident : Identification.values()) {
@@ -141,6 +150,11 @@ public class ServerFTP{
         dos.writeBytes(returnMsg);
     }
 
+    /**
+     * this function permits to the server to answer to the PASS command for authentification
+     * @param usernamePassword the username and password a user is trying to connect
+     * @throws IOException
+     */
     public void commandPass(String usernamePassword) throws IOException {
         String returnMsg = "430 wrong password\r\n";
         String[] usernamePasswordSplit = usernamePassword.split(" ");
@@ -156,11 +170,19 @@ public class ServerFTP{
         dos.writeBytes(returnMsg); 
     }
 
+    /**
+     * this function permits to the server to answer to the SYST command
+     * @throws IOException
+     */
     public void commandSyst()  throws IOException {
         System.out.println("Envoi de l'OS");
         dos.writeBytes("215 UNIX\r\n");
     }
 
+     /**
+     * the server is closed when the command "QUIT" is given by a user
+     * @throws IOException
+     */
     public void commandQuit() throws IOException {
         System.out.println("deconnexion");
         dos.writeBytes("221 Deconnexion\r\n");
@@ -175,18 +197,32 @@ public class ServerFTP{
         socket.close();
 
     }
-
+    /**
+     * this function permits to the server to answer to the PORT command 
+     * @param port the port given by the server
+     * @throws IOException
+     */
     public void commandPort(String port) throws IOException {
         System.out.println(port);
         dos.writeBytes("200 Command okay.\r\n");
         // creer une nouvelle socket qui se connecte à port_TCP avec l'ip h1 h2 h3 h4
     }
 
+    /**
+     * this function permits to the server to answer to the Retr command for download a file
+     * @param file the file to download
+     * @throws IOException
+     */
     public void commandRetr(String file) throws IOException {
         System.out.println("telechargement de "+file);
         dos.writeBytes("150 File status okay; about to open data connection.\r\n");
     }
 
+    /**
+     * this function permits to the server to answer to the GET command to get a file on local
+     * @param file the file we want to get
+     * @throws IOException
+     */
     public void commandGet(String file) throws IOException {
         File src = new File("test/"+file);
 
@@ -200,7 +236,7 @@ public class ServerFTP{
         } 
         is.close();
         outputEnvoie.close();
-        dos.writeBytes("250 the file as well been copied");
+        dos.writeBytes("226 Closing data connection.");
     }
 
 }
