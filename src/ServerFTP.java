@@ -1,18 +1,13 @@
 import java.io.BufferedReader;
-import java.io.DataOutput;
 import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 
 import tool.Identification;
 
@@ -118,11 +113,11 @@ public class ServerFTP{
                 int port_TCP = Integer.parseInt(p1) * 256 + Integer.parseInt(p2);
                 String ipEnvoie = h1+"."+h2+"."+h3+"."+h4;
 
-                Socket socketEnvoie = new Socket(ipEnvoie, port_TCP);
+                socketEnvoie = new Socket(ipEnvoie, port_TCP);
         
             }
             else if(commandAsk.startsWith("RETR")) {
-                commandPort(message);
+                commandRetr(message);
             }
             else if(commandAsk.startsWith("GET")){
                 commandGet(message);
@@ -216,6 +211,8 @@ public class ServerFTP{
     public void commandRetr(String file) throws IOException {
         System.out.println("telechargement de "+file);
         dos.writeBytes("150 File status okay; about to open data connection.\r\n");
+
+        commandGet(file);
     }
 
     /**
@@ -236,7 +233,7 @@ public class ServerFTP{
         } 
         is.close();
         outputEnvoie.close();
-        dos.writeBytes("226 Closing data connection.");
+        dos.writeBytes("226 Closing data connection.\r\n");
     }
 
 }

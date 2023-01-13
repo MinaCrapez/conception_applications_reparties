@@ -6,9 +6,7 @@
 -------------
 a faire :
 
-- verifier si c'est bien ce qu'il faut faire au get
-- corriger le bug du quit
-- continuer les autres commandes
+- faire put
 
 amelioration a faire :
 - penser à faire les min et max de threads et continuer leur gestion 
