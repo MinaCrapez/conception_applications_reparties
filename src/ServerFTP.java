@@ -292,7 +292,9 @@ public class ServerFTP{
     }
 
     public void commandCwd(String repertoire) throws IOException{
+        String reponse = "550 file unavailable\r\n";
         if (repertoire.equals("../")) {
+            reponse = "200 Command okay.\r\n";
             // on revient au directory precedent
             String[] dir = directory.split("/");
             if (dir.length > 1) {
@@ -303,9 +305,16 @@ public class ServerFTP{
             }
         }
         else {
-            directory = directory+"/"+repertoire;
+            File dir  = new File(directory);
+            File[] listeDesFichiers = dir.listFiles();
+            for(File item : listeDesFichiers){
+                if (repertoire.equals(item.getName())) {
+                    directory = directory+"/"+repertoire; 
+                    reponse = "200 Command okay.\r\n";
+                }
+            }
         }
-        dos.writeBytes("200 Command okay.\r\n"); 
+        dos.writeBytes(reponse);
     }
 
     public void commandList(String repertoire) throws IOException {
@@ -316,7 +325,6 @@ public class ServerFTP{
 
     public void listerLesFichiers(File dir) {
         File[] liste = dir.listFiles();
-        System.out.println(liste.length);
         if (liste.length != 0) {
             for(File item : liste){
                 if(item.isFile()){ 
