@@ -1,4 +1,4 @@
-all : serverFTP
+all : serverFTP 
 
 doc :
 	javadoc src/*.java -d docs;

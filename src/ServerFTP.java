@@ -148,6 +148,9 @@ public class ServerFTP{
 
     }
 
+    /*
+     * verify if a user is well connected
+     */
     public void verifLogin() throws IOException {
         if (!logIn) {
             dos.writeBytes("231 user not connected, end of the service\r\n");
