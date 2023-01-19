@@ -2,6 +2,7 @@ import java.io.BufferedReader;
 import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -206,10 +207,16 @@ public class ServerFTP{
      * @throws IOException
      */
     public void commandRetr(String file) throws IOException {
-        System.out.println("telechargement de "+file);
-        dos.writeBytes("150 File status okay; about to open data connection.\r\n");
-
-        commandGet(file);
+        File src = new File("home/"+username+"/"+file);
+        if (src.exists()) {
+            System.out.println("le fichier "+file+" dans le dépot personnel home/"+username+" a été trouvé");
+            System.out.println("telechargement de "+file);
+            dos.writeBytes("150 File status okay; about to open data connection.\r\n");
+            commandGet(src);
+        }
+        else {
+            dos.writeBytes("450 the distant file is not available.\r\n");
+        }
     }
 
     /**
@@ -217,8 +224,8 @@ public class ServerFTP{
      * @param file the file we want to get
      * @throws IOException
      */
-    public void commandGet(String file) throws IOException {
-        File src = new File("test"+file);
+    public void commandGet(File src) throws IOException {
+        creationDepot();  
         InputStream is = new FileInputStream(src);
         OutputStream outputEnvoie = socketEnvoie.getOutputStream();
         byte[] buffer = new byte[1024];
@@ -228,7 +235,17 @@ public class ServerFTP{
         } 
         is.close();
         outputEnvoie.close();
-        dos.writeBytes("226 Closing data connection.\r\n");
+        dos.writeBytes("226 Closing data connection.\r\n"); 
+    }
+
+    /*
+     * create the inexistant distant depot if a new user is create
+     */
+    public void creationDepot() {
+        for (Identification ident : Identification.values()) {
+            File src = new File("home/"+ident.getUsername());
+            src.mkdir();
+        }
     }
 
 }
