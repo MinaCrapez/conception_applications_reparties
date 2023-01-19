@@ -98,6 +98,7 @@ public class ServerFTP{
                 directory = directory+username;
             }
             else if(commandAsk.startsWith("SYST")) {
+                verifLogin();
                 commandSyst();
             }
             else if(commandAsk.startsWith("QUIT")) {
@@ -105,6 +106,7 @@ public class ServerFTP{
                 return;
             }
             else if(commandAsk.startsWith("PORT")) {
+                verifLogin();
                 commandPort(message);
                 String portSocketEnvoie = message;
 
@@ -124,15 +126,19 @@ public class ServerFTP{
         
             }
             else if(commandAsk.startsWith("RETR")) {
+                verifLogin();
                 commandRetr(message);
             }
             else if(commandAsk.startsWith("STOR")) {
+                verifLogin();
                 commandStor(message);
             }
             else if(commandAsk.startsWith("CWD")) {
+                verifLogin();
                 commandCwd(message);
             }
             else if(commandAsk.startsWith("LIST")) {
+                verifLogin();
                 commandList(message);
             }
             else {
@@ -140,6 +146,13 @@ public class ServerFTP{
             }
         }
 
+    }
+
+    public void verifLogin() throws IOException {
+        if (!logIn) {
+            dos.writeBytes("231 user not connected, end of the service\r\n");
+            commandQuit();
+        }
     }
 
     /**

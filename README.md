@@ -7,10 +7,7 @@
 a faire :
 - penser à faire les min et max de threads et continuer leur gestion 
 - faire un readme propre
-- faire une FTPexception
-- mettre les bons messages d'erreurs avec les exception (try catch)
 - sécuriser avec plusieurs utilisateur (synchronised, voir cours)
-- gerer le logIn true
 
 1er terminal :
 ```
