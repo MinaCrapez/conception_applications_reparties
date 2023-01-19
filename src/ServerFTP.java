@@ -2,6 +2,7 @@ import java.io.BufferedReader;
 import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -24,11 +25,12 @@ public class ServerFTP{
     protected int port; // the integer using as a port to connect the server
     protected Boolean isOpen; // a boolean representing if the server is closed or opened
     protected Boolean logIn; // a boolean representing if a client is connected or not
-    protected InputStream is;
-    protected OutputStream os;
-    protected InputStreamReader isr;
-    protected BufferedReader br;
-    protected DataOutputStream dos;
+    protected String username; // le username connecté
+    protected InputStream is; // permet d'agir sur les données d'entrée
+    protected OutputStream os; // permet d'agir les données de sortie
+    protected InputStreamReader isr; // permet de lire les données dentrée
+    protected BufferedReader br; // permet de lire les données
+    protected DataOutputStream dos; // permet de representer les données à ecrire
 
     public ServerFTP(Socket socket, int port) throws IOException{
         this.socket = socket;
@@ -65,7 +67,6 @@ public class ServerFTP{
      * @throws IOException
     */
     public void start() throws IOException {
-        String username = "";
 
         System.out.println("Connect to host Linux, port "+port+",establishing control connections.");
         dos.writeBytes("220 Service ready \r\n");
@@ -119,9 +120,6 @@ public class ServerFTP{
             else if(commandAsk.startsWith("RETR")) {
                 commandRetr(message);
             }
-            else if(commandAsk.startsWith("GET")){
-                commandGet(message);
-            }
             else {
                 dos.writeBytes("502 command not implemented\r\n");
             }
@@ -153,12 +151,12 @@ public class ServerFTP{
     public void commandPass(String usernamePassword) throws IOException {
         String returnMsg = "430 wrong password\r\n";
         String[] usernamePasswordSplit = usernamePassword.split(" ");
-        String username = usernamePasswordSplit[0];
+        String usrname = usernamePasswordSplit[0];
         String password = usernamePasswordSplit[1];
 
         for (Identification ident : Identification.values()) {
-            if(username != null && ident.getUsername().equals(username) && ident.getMotDePasse().equals(password)) {
-                System.out.println("user login with username "+username+" and password "+password);
+            if(username != null && ident.getUsername().equals(usrname) && ident.getMotDePasse().equals(password)) {
+                System.out.println("user login with username "+usrname+" and password "+password);
                 returnMsg = "230 User logged in \r\n";
             }
         } 
@@ -183,7 +181,6 @@ public class ServerFTP{
         dos.writeBytes("221 Deconnexion\r\n");
 
         logIn = false;
-
         isr.close();
         br.close();
         dos.close();
@@ -221,11 +218,9 @@ public class ServerFTP{
      * @throws IOException
      */
     public void commandGet(String file) throws IOException {
-        File src = new File("test/"+file);
-
+        File src = new File("test"+file);
         InputStream is = new FileInputStream(src);
         OutputStream outputEnvoie = socketEnvoie.getOutputStream();
-
         byte[] buffer = new byte[1024];
         int len;
         while ((len = is.read(buffer)) > 0) {
