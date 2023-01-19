@@ -95,7 +95,7 @@ public class ServerFTP{
             else if(commandAsk.startsWith("PASS")) {
                 commandPass(username+" "+message);
                 logIn = true;
-                directory = directory+username+"/";
+                directory = directory+username;
             }
             else if(commandAsk.startsWith("SYST")) {
                 commandSyst();
@@ -220,7 +220,7 @@ public class ServerFTP{
      * @throws IOException
      */
     public void commandRetr(String file) throws IOException {
-        File src = new File(directory.concat(file));
+        File src = new File(directory+"/"+file);
         if (src.exists()) {
             System.out.println("le fichier "+file+" dans le dépot personnel home/"+username+" a été trouvé");
             System.out.println("telechargement de "+file);
@@ -266,7 +266,7 @@ public class ServerFTP{
      * @throws IOException
      */
     public void commandStor(String src) throws IOException {
-        File destination = new File(directory.concat(src));
+        File destination = new File(directory+"/"+src);
         dos.writeBytes("150 File status okay; about to open data connection.\r\n");
 
         commandPut(destination);
@@ -292,9 +292,20 @@ public class ServerFTP{
     }
 
     public void commandCwd(String repertoire) throws IOException{
-        directory = directory.concat(repertoire);
-        System.out.println("le nouveau repertoire est "+ repertoire);
-        dos.writeBytes("200 Command okay.\r\n");
+        if (repertoire.equals("../")) {
+            // on revient au directory precedent
+            String[] dir = directory.split("/");
+            if (dir.length > 1) {
+                directory = "home";
+                for (int i = 1; i< dir.length - 1; i ++) {
+                    directory = directory+"/"+dir[i]; 
+                  }
+            }
+        }
+        else {
+            directory = directory+"/"+repertoire;
+        }
+        dos.writeBytes("200 Command okay.\r\n"); 
     }
 
     public void commandList(String repertoire) throws IOException {
@@ -305,16 +316,19 @@ public class ServerFTP{
 
     public void listerLesFichiers(File dir) {
         File[] liste = dir.listFiles();
-        if (liste != null) {
+        System.out.println(liste.length);
+        if (liste.length != 0) {
             for(File item : liste){
                 if(item.isFile()){ 
-                    System.out.println("Nom du fichier: "+item.getName()); 
-                    listerLesFichiers(item);
+                    System.out.println("fichier: "+item.getName()); 
                 } 
                 else if(item.isDirectory()){
-                    System.out.println("Nom du répertoire: "+item.getName()); 
+                    System.out.println("répertoire: "+item.getName()); 
                 }
             }
+        }
+        else {
+            System.out.println("le fichier est vide");
         }
     }
 

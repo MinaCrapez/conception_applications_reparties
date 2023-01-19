@@ -6,8 +6,6 @@
 -------------
 a faire :
 
-- faire cd
-
 amelioration a faire :
 - penser à faire les min et max de threads et continuer leur gestion 
 - faire un readme propre
