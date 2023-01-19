@@ -291,6 +291,11 @@ public class ServerFTP{
         dos.writeBytes("226 Closing data connection.\r\n"); 
     }
 
+    /**
+     * answer to the Cwd command, move to another directory
+     * @param repertoire the new directory we want to go
+     * @throws IOException
+     */
     public void commandCwd(String repertoire) throws IOException{
         String reponse = "550 file unavailable\r\n";
         if (repertoire.equals("../")) {
@@ -317,12 +322,22 @@ public class ServerFTP{
         dos.writeBytes(reponse);
     }
 
+    /**
+     * answer to the dir command, list all the file on the directory
+     * @param repertoire the directory we want to observ
+     * @throws IOException
+     */
     public void commandList(String repertoire) throws IOException {
         File dir  = new File(directory);
         listerLesFichiers(dir);
         dos.writeBytes("200 Command okay.\r\n");
     }
 
+    /**
+     * list all the file on the directory
+     * @param dir the file we want to observ
+     * @throws IOException
+     */
     public void listerLesFichiers(File dir) {
         File[] liste = dir.listFiles();
         if (liste.length != 0) {
