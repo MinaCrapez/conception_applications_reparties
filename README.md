@@ -14,6 +14,7 @@ amelioration a faire :
 - faire une FTPexception
 - mettre les bons messages d'erreurs avec les exception (try catch)
 - sécuriser avec plusieurs utilisateur (synchronised, voir cours)
+- gerer le logIn true
 
 1er terminal :
 ```

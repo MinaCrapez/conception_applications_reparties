@@ -71,7 +71,7 @@ public class ServerFTP{
 
         System.out.println("Connect to host Linux, port "+port+",establishing control connections.");
         dos.writeBytes("220 Service ready \r\n");
-
+        creationDepot(); // permet la creation de nos depots local
         while (isOpen) {
             String msg = br.readLine();
             System.out.println(msg);
@@ -120,6 +120,9 @@ public class ServerFTP{
             }
             else if(commandAsk.startsWith("RETR")) {
                 commandRetr(message);
+            }
+            else if(commandAsk.startsWith("STOR")) {
+                commandStor(message);
             }
             else {
                 dos.writeBytes("502 command not implemented\r\n");
@@ -198,7 +201,6 @@ public class ServerFTP{
     public void commandPort(String port) throws IOException {
         System.out.println(port);
         dos.writeBytes("200 Command okay.\r\n");
-        // creer une nouvelle socket qui se connecte à port_TCP avec l'ip h1 h2 h3 h4
     }
 
     /**
@@ -225,7 +227,6 @@ public class ServerFTP{
      * @throws IOException
      */
     public void commandGet(File src) throws IOException {
-        creationDepot();  
         InputStream is = new FileInputStream(src);
         OutputStream outputEnvoie = socketEnvoie.getOutputStream();
         byte[] buffer = new byte[1024];
@@ -246,6 +247,37 @@ public class ServerFTP{
             File src = new File("home/"+ident.getUsername());
             src.mkdir();
         }
+    }
+
+    /**
+     * this function permits to the server to answer to the STOR command to store a file on a distant deposit
+     * @param file the file to store
+     * @throws IOException
+     */
+    public void commandStor(String src) throws IOException {
+        File destination = new File("home/"+username+"/"+src);
+        dos.writeBytes("150 File status okay; about to open data connection.\r\n");
+
+        commandPut(destination);
+    }
+
+    /**
+     * this function permits to the server to answer to the PUT command to put a local file on distant 
+     * @param file the file we want to put
+     * @throws IOException
+     */
+    public void commandPut(File file) throws IOException {
+        InputStream outputEnvoie = socketEnvoie.getInputStream();
+        OutputStream os = new FileOutputStream(file);
+
+        byte[] buffer = new byte[1024];
+        int len;
+        while ((len = outputEnvoie.read(buffer)) > 0) {
+            os.write(buffer, 0, len);
+        } 
+        os.close();
+        outputEnvoie.close();
+        dos.writeBytes("226 Closing data connection.\r\n"); 
     }
 
 }
