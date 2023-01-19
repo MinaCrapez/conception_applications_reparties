@@ -10,6 +10,8 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.ArrayList;
+import java.util.List;
 
 import tool.Identification;
 
@@ -27,6 +29,7 @@ public class ServerFTP{
     protected Boolean isOpen; // a boolean representing if the server is closed or opened
     protected Boolean logIn; // a boolean representing if a client is connected or not
     protected String username; // le username connecté
+    protected String directory;
     protected InputStream is; // permet d'agir sur les données d'entrée
     protected OutputStream os; // permet d'agir les données de sortie
     protected InputStreamReader isr; // permet de lire les données dentrée
@@ -38,6 +41,7 @@ public class ServerFTP{
         this.port = port; 
         this.isOpen = true;
         this.logIn = false; 
+        this.directory = "home/";
 
         is = socket.getInputStream();
         os = socket.getOutputStream();
@@ -91,6 +95,7 @@ public class ServerFTP{
             else if(commandAsk.startsWith("PASS")) {
                 commandPass(username+" "+message);
                 logIn = true;
+                directory = directory+username+"/";
             }
             else if(commandAsk.startsWith("SYST")) {
                 commandSyst();
@@ -123,6 +128,12 @@ public class ServerFTP{
             }
             else if(commandAsk.startsWith("STOR")) {
                 commandStor(message);
+            }
+            else if(commandAsk.startsWith("CWD")) {
+                commandCwd(message);
+            }
+            else if(commandAsk.startsWith("LIST")) {
+                commandList(message);
             }
             else {
                 dos.writeBytes("502 command not implemented\r\n");
@@ -209,7 +220,7 @@ public class ServerFTP{
      * @throws IOException
      */
     public void commandRetr(String file) throws IOException {
-        File src = new File("home/"+username+"/"+file);
+        File src = new File(directory.concat(file));
         if (src.exists()) {
             System.out.println("le fichier "+file+" dans le dépot personnel home/"+username+" a été trouvé");
             System.out.println("telechargement de "+file);
@@ -255,7 +266,7 @@ public class ServerFTP{
      * @throws IOException
      */
     public void commandStor(String src) throws IOException {
-        File destination = new File("home/"+username+"/"+src);
+        File destination = new File(directory.concat(src));
         dos.writeBytes("150 File status okay; about to open data connection.\r\n");
 
         commandPut(destination);
@@ -278,6 +289,33 @@ public class ServerFTP{
         os.close();
         outputEnvoie.close();
         dos.writeBytes("226 Closing data connection.\r\n"); 
+    }
+
+    public void commandCwd(String repertoire) throws IOException{
+        directory = directory.concat(repertoire);
+        System.out.println("le nouveau repertoire est "+ repertoire);
+        dos.writeBytes("200 Command okay.\r\n");
+    }
+
+    public void commandList(String repertoire) throws IOException {
+        File dir  = new File(directory);
+        listerLesFichiers(dir);
+        dos.writeBytes("200 Command okay.\r\n");
+    }
+
+    public void listerLesFichiers(File dir) {
+        File[] liste = dir.listFiles();
+        if (liste != null) {
+            for(File item : liste){
+                if(item.isFile()){ 
+                    System.out.println("Nom du fichier: "+item.getName()); 
+                    listerLesFichiers(item);
+                } 
+                else if(item.isDirectory()){
+                    System.out.println("Nom du répertoire: "+item.getName()); 
+                }
+            }
+        }
     }
 
 }

@@ -6,7 +6,7 @@
 -------------
 a faire :
 
-- faire put
+- faire cd
 
 amelioration a faire :
 - penser à faire les min et max de threads et continuer leur gestion 
