@@ -8,7 +8,7 @@ a faire :
 - multithread et protection
 
 
-### <u>Pour lancer le projet :</u>
+### <u>Lancer le projet :</u>
 
 - dans la *racine du projet*, dans un premier terminal :
 ```
@@ -16,11 +16,12 @@ make all
 ```
 Make all va permettre de compiler le projet.
 
+Pour lancer le serveur :
+
 ```
 cd src
 javac ServerFTP
 ```
-permetttra de lancer le serveur.
 
 - dans un second terminal :
 ``` 
@@ -28,14 +29,14 @@ ftp localhost 1024
 
 ```
 
-### <u>Pour créer la documentation du projet :</u>
+### <u>Créer la documentation du projet :</u>
 
 - dans la *racine du projet*, dans un premier terminal :
 ```
 make doc
 ```
 
-### <u>Pour clean le projet :</u>
+### <u>Clean le projet :</u>
 
 - dans la *racine du projet*, dans un premier terminal :
 ```

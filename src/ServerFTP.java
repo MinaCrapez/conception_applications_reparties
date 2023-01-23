@@ -22,8 +22,12 @@ public class ServerFTP{
      * 09/01/23
      * Mina Crapez - M1 MIAGE
      */
+    final static int MAXTHREADS = 150; // nombre maximum de thread sur le serveur
+    final static int MINTHREADS = 15; // nombre créé de thread au départ sur le serveur
+    final static int MAXTHREADSINACTIF = 20;
+    final static int MINTHREADINACTIF = 5;
 
-    protected Socket socket; // a socket to access the server
+    protected static Socket socket; // a socket to access the server
     protected Socket socketEnvoie; // a socket to get data
     protected int port; // the integer using as a port to connect the server
     protected Boolean isOpen; // a boolean representing if the server is closed or opened
@@ -35,6 +39,8 @@ public class ServerFTP{
     protected InputStreamReader isr; // permet de lire les données dentrée
     protected BufferedReader br; // permet de lire les données
     protected DataOutputStream dos; // permet de representer les données à ecrire
+    protected static ArrayList<Thread> threads = new ArrayList<>(MINTHREADS); // liste des threads des clients pour la gestion de plusieurs users
+    
 
     public ServerFTP(Socket socket, int port) throws IOException{
         this.socket = socket;
@@ -49,34 +55,69 @@ public class ServerFTP{
         isr = new InputStreamReader(is);
         br = new BufferedReader(isr);
         dos = new DataOutputStream(os);
+
+       // this.threads = threads;
     }
 
     public static void main(String[] args) throws IOException {
-
+        // initialisation 
         int port = 1024;
         if (args.length > 0) {
             port = Integer.parseInt(args[0]);
         }
         // connexion
         ServerSocket serverSocket = new ServerSocket(port); 
-        Socket socket = serverSocket.accept(); 
+        socket = serverSocket.accept(); 
+        //ServerFTP server = new ServerFTP(socket, port,threads);
         ServerFTP server = new ServerFTP(socket, port);
         server.start();
 
         serverSocket.close();
-        socket.close();
+        //socket.close();
     }
 
     /*
      * start the server, a user can use some implemented commands 
      * @throws IOException
     */
-    public void start() throws IOException {
-
+    public void start() throws IOException { 
         System.out.println("Connect to host Linux, port "+port+",establishing control connections.");
         dos.writeBytes("220 Service ready \r\n");
         creationDepot(); // permet la creation de nos depots local
         while (isOpen) {
+
+            /// GESTION DES THREADS ///
+
+            // gestion du minimum et maximum de nombre de threads sur le server
+            System.out.println("Our list of threads is : "+threads);
+            verifNbThreads();
+
+            // gestion des threads inactifs
+
+            int nbThreadsInactifs = giveThreadsInactifs();
+            System.out.println("on a "+nbThreadsInactifs+" inactive threads");
+
+            if(nbThreadsInactifs > MAXTHREADSINACTIF) {
+                suppressionInactiveThread(nbThreadsInactifs - MAXTHREADSINACTIF);
+            }
+
+            if (nbThreadsInactifs < MINTHREADINACTIF) {
+                ajoutInactiveThread(MINTHREADINACTIF - nbThreadsInactifs);
+            }
+
+            System.out.println("la nouvelle liste de threads est : "+threads);
+            // gestion du quel thread utilise-t-on
+            Thread threadUtilise;
+            int i = 0;
+            while(threads.get(i).isAlive()) { 
+                i++;
+            }
+            threadUtilise = threads.get(i); // we take the next inactive thread on the list
+            System.out.println("le thread quon va utiliser est "+threadUtilise);
+            threadUtilise.run(); // the inactive thread become the current thread and is active
+
+            /// FIN GESTION DES THREADS ///
+
             String msg = br.readLine();
             System.out.println(msg);
 
@@ -148,6 +189,69 @@ public class ServerFTP{
 
     }
 
+    /// FONCTION POUR LA GESTION DES THREADS ///
+
+    /**
+     * change the number of threads by verifying the max number of threads
+     */
+    public void verifNbThreads() {
+        if (threads.size() < MAXTHREADS) {
+            System.out.println("on est bien sous le max et on ajoutera");
+            Thread thread = new Thread();
+            threads.add(thread);
+        }
+        else {
+            System.out.println("on a trop de threads, on clear");
+            threads.clear();
+            threads = new ArrayList<>(MINTHREADS);
+        }
+    }
+
+    /**
+     * give the number of inactive threads
+     * @return the number of inactive threads
+     * 
+     */
+    public int giveThreadsInactifs() {
+        int res = 0;
+        for(Thread t : threads) {
+            if (!t.isAlive()) {
+                res ++;
+            }
+        }
+        return res;
+    }
+
+    /**
+     * suppress a inactiveThread 
+     * @param nbASuppr the total number of thread we still have to supress
+     */
+    public void suppressionInactiveThread(int nbASuppr) {
+        System.out.println("on doit supprimer des threads inactifs");
+        if(nbASuppr!= 0) {
+            for (Thread t : threads) {
+                if(!t.isAlive()) {
+                    threads.remove(t);
+                }
+            }
+            suppressionInactiveThread(nbASuppr - 1);
+        }
+    }
+
+    /**
+     * add inactive thread if some of them are missing
+     * @param nbAAjouter the number of inactive thread we want to add
+     */
+    public void ajoutInactiveThread(int nbAAjouter) {
+        System.out.println("on doit ajouter des threads inactifs");
+        for (int i=0; i< nbAAjouter; i++) {
+            Thread thread = new Thread();
+            threads.add(thread);
+        }
+    }
+
+    /// FONCTION POUR LES COMMANDES DU SERVEUR ///
+
     /*
      * verify if a user is well connected
      */
@@ -210,8 +314,9 @@ public class ServerFTP{
     public void commandQuit() throws IOException {
         System.out.println("deconnexion");
         dos.writeBytes("221 Deconnexion\r\n");
-
+        socket.close();
         logIn = false;
+        isOpen = false ;
         isr.close();
         br.close();
         dos.close();
