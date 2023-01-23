@@ -114,7 +114,7 @@ public class ServerFTP{
             }
             threadUtilise = threads.get(i); // we take the next inactive thread on the list
             System.out.println("le thread quon va utiliser est "+threadUtilise);
-            threadUtilise.run(); // the inactive thread become the current thread and is active
+            threadUtilise.start(); // the inactive thread become the current thread and is active
 
             /// FIN GESTION DES THREADS ///
 
