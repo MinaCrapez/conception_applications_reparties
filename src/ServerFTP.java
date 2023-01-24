@@ -22,11 +22,11 @@ public class ServerFTP{
      * 09/01/23
      * Mina Crapez - M1 MIAGE
      */
-    final static int MAXTHREADS = 150; // nombre maximum de thread sur le serveur
+/*     final static int MAXTHREADS = 150; // nombre maximum de thread sur le serveur
     final static int MINTHREADS = 15; // nombre créé de thread au départ sur le serveur
     final static int MAXTHREADSINACTIF = 20;
     final static int MINTHREADINACTIF = 5;
-
+ */
     protected static Socket socket; // a socket to access the server
     protected Socket socketEnvoie; // a socket to get data
     protected int port; // the integer using as a port to connect the server
@@ -39,7 +39,7 @@ public class ServerFTP{
     protected InputStreamReader isr; // permet de lire les données dentrée
     protected BufferedReader br; // permet de lire les données
     protected DataOutputStream dos; // permet de representer les données à ecrire
-    protected static ArrayList<Thread> threads = new ArrayList<>(MINTHREADS); // liste des threads des clients pour la gestion de plusieurs users
+   // protected static ArrayList<Thread> threads = new ArrayList<>(MINTHREADS); // liste des threads des clients pour la gestion de plusieurs users
     
 
     public ServerFTP(Socket socket, int port) throws IOException{
@@ -55,8 +55,6 @@ public class ServerFTP{
         isr = new InputStreamReader(is);
         br = new BufferedReader(isr);
         dos = new DataOutputStream(os);
-
-       // this.threads = threads;
     }
 
     public static void main(String[] args) throws IOException {
@@ -68,7 +66,6 @@ public class ServerFTP{
         // connexion
         ServerSocket serverSocket = new ServerSocket(port); 
         socket = serverSocket.accept(); 
-        //ServerFTP server = new ServerFTP(socket, port,threads);
         ServerFTP server = new ServerFTP(socket, port);
         server.start();
 
@@ -85,10 +82,11 @@ public class ServerFTP{
         dos.writeBytes("220 Service ready \r\n");
         creationDepot(); // permet la creation de nos depots local
         while (isOpen) {
-
+            ThreadFTP thread = new ThreadFTP();
+            thread.run();
             /// GESTION DES THREADS ///
 
-            // gestion du minimum et maximum de nombre de threads sur le server
+           /*  // gestion du minimum et maximum de nombre de threads sur le server
             System.out.println("Our list of threads is : "+threads);
             verifNbThreads();
 
@@ -115,7 +113,7 @@ public class ServerFTP{
             threadUtilise = threads.get(i); // we take the next inactive thread on the list
             System.out.println("le thread quon va utiliser est "+threadUtilise);
             threadUtilise.start(); // the inactive thread become the current thread and is active
-
+ */
             /// FIN GESTION DES THREADS ///
 
             String msg = br.readLine();
@@ -194,7 +192,7 @@ public class ServerFTP{
     /**
      * change the number of threads by verifying the max number of threads
      */
-    public void verifNbThreads() {
+/*     public void verifNbThreads() {
         if (threads.size() < MAXTHREADS) {
             System.out.println("on est bien sous le max et on ajoutera");
             Thread thread = new Thread();
@@ -205,14 +203,14 @@ public class ServerFTP{
             threads.clear();
             threads = new ArrayList<>(MINTHREADS);
         }
-    }
+    } */
 
     /**
      * give the number of inactive threads
      * @return the number of inactive threads
      * 
      */
-    public int giveThreadsInactifs() {
+/*     public int giveThreadsInactifs() {
         int res = 0;
         for(Thread t : threads) {
             if (!t.isAlive()) {
@@ -220,13 +218,13 @@ public class ServerFTP{
             }
         }
         return res;
-    }
+    } */
 
     /**
      * suppress a inactiveThread 
      * @param nbASuppr the total number of thread we still have to supress
      */
-    public void suppressionInactiveThread(int nbASuppr) {
+/*     public void suppressionInactiveThread(int nbASuppr) {
         System.out.println("on doit supprimer des threads inactifs");
         if(nbASuppr!= 0) {
             for (Thread t : threads) {
@@ -236,19 +234,19 @@ public class ServerFTP{
             }
             suppressionInactiveThread(nbASuppr - 1);
         }
-    }
+    } */
 
     /**
      * add inactive thread if some of them are missing
      * @param nbAAjouter the number of inactive thread we want to add
      */
-    public void ajoutInactiveThread(int nbAAjouter) {
+/*     public void ajoutInactiveThread(int nbAAjouter) {
         System.out.println("on doit ajouter des threads inactifs");
         for (int i=0; i< nbAAjouter; i++) {
             Thread thread = new Thread();
             threads.add(thread);
         }
-    }
+    } */
 
     /// FONCTION POUR LES COMMANDES DU SERVEUR ///
 
