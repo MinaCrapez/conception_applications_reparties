@@ -46,20 +46,27 @@ public class ClientFTP {
         dos.writeBytes("PASS poipoi\r\n");
         str = br.readLine(); 
         System.out.println(str);
+        dos.writeBytes("SYST\r\n");
         System.out.println("Remote system type is UNIX");
-        // get
-        System.out.println("get");
-        System.out.println("(remote-file) : test.txt");
-        System.out.println("(local-file) : test2.txt");
+        dos.writeBytes("FEAT\r\n");
+        str = br.readLine(); 
+        System.out.println(str); 
+        dos.writeBytes("TYPE I\r\n");
+        str = br.readLine(); 
+        System.out.println(str); 
+        System.out.println("Using binary mode to transfer files");
+        System.out.println("> get");
+        System.out.println("(remote-file) : local.txt");
+        System.out.println("(local-file) : distant.txt");
+        System.out.println("local : local.txt remote: distant.txt");
         dos.writeBytes("EPSV\r\n");
         str = br.readLine(); 
         System.out.println(str);
-        dos.writeBytes("TYPE I\r\n");
-        str = br.readLine(); 
-        System.out.println(str);
+        // get
         dos.writeBytes("RETR test.txt\r\n");
         str = br.readLine(); 
         System.out.println(str);
+        dos.writeBytes("path : poipoi/local.txt");
     }
 
 }
