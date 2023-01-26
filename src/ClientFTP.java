@@ -7,25 +7,14 @@ public class ClientFTP {
      * client du serveur FTP de Camille Poirier
      */
 
-    private boolean isLoggin; // permet de savoir si le client est connecté ou non
-    private String username; // le username du client
-    private String password; // le password du client
-
     private static int port;
     private static String ip;
-
-   // private static ServerSocket serverSocket;
-    private String directory;
-    private Socket socket;
 
     private InputStreamReader isr;
     private BufferedReader br;
     private DataOutputStream dos;
 
     public ClientFTP(Socket socket) throws IOException {
-        this.socket = socket;
-        this.directory = "/";
-
         InputStream is = socket.getInputStream();
         OutputStream os = socket.getOutputStream();
 
@@ -33,14 +22,6 @@ public class ClientFTP {
         br = new BufferedReader(isr);
         dos = new DataOutputStream(os);
 }
-
-    public Boolean getIsLoggin() {
-        return this.isLoggin;
-    }
-
-    public void setIsLoggin(Boolean newLoggin) {
-        this.isLoggin = newLoggin;
-    }
 
     public static void main(String[] args) throws IOException {
         ip = args[0];
@@ -53,11 +34,32 @@ public class ClientFTP {
     }
 
     public void run() throws IOException {
-        String str = br.readLine(); 
+        // identification
+        String str = "";
+        str = br.readLine(); 
         System.out.println(str);
-        System.out.println("Name("+ip+"):");
-        username = br.readLine();
-        System.out.println("USER "+username);
+        System.out.println("Name("+ip+"): poipoi");
+        dos.writeBytes("USER poipoi\r\n");
+        str = br.readLine(); 
+        System.out.println(str);
+        System.out.println("Password: poipoi");
+        dos.writeBytes("PASS poipoi\r\n");
+        str = br.readLine(); 
+        System.out.println(str);
+        System.out.println("Remote system type is UNIX");
+        // get
+        System.out.println("get");
+        System.out.println("(remote-file) : test.txt");
+        System.out.println("(local-file) : test2.txt");
+        dos.writeBytes("EPSV\r\n");
+        str = br.readLine(); 
+        System.out.println(str);
+        dos.writeBytes("TYPE I\r\n");
+        str = br.readLine(); 
+        System.out.println(str);
+        dos.writeBytes("RETR test.txt\r\n");
+        str = br.readLine(); 
+        System.out.println(str);
     }
 
 }
