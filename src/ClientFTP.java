@@ -59,6 +59,9 @@ public class ClientFTP {
         System.out.println("Using binary mode to transfer files");
         // dir
         System.out.println("> dir");
+        dos.writeBytes("EPSV\r\n");
+        str = br.readLine(); 
+        System.out.println(str);
         dos.writeBytes("LIST\r\n");
         str = br.readLine(); 
         System.out.println(str);
@@ -70,20 +73,25 @@ public class ClientFTP {
         dos.writeBytes("CWD dir\r\n");
         str = br.readLine(); 
         System.out.println(str);
-        // get
-       /*  System.out.println("> get");
-        System.out.println("(remote-file) : test3.txt");
-        System.out.println("(local-file) : local2.txt");
-        System.out.println("local : local2.txt remote: test3.txt");
+        // put
+        System.out.println("> put local.txt");
         dos.writeBytes("EPSV\r\n");
         str = br.readLine(); 
         System.out.println(str);
-        dos.writeBytes("RETR local2.txt\r\n");
+        dos.writeBytes("STOR local.txt\r\n");
         str = br.readLine(); 
         System.out.println(str);
-        dos.writeBytes("path : poipoi/test3.txt\r\n");
+        dos.writeBytes("TYPE A");
         str = br.readLine(); 
-        System.out.println(str);   */
+        System.out.println(str);
+        // get
+        System.out.println("> get test2.txt");
+        dos.writeBytes("EPSV\r\n");
+        str = br.readLine(); 
+        System.out.println(str);
+        dos.writeBytes("RETR test2.txt\r\n");
+        str = br.readLine(); 
+        System.out.println(str);
         // quit
         System.out.println("> quit");
         dos.writeBytes("QUIT\r\n");
