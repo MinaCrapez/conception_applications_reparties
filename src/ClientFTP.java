@@ -55,13 +55,6 @@ public class ClientFTP {
         str = br.readLine(); 
         System.out.println(str); 
         System.out.println("Using binary mode to transfer files");
-        System.out.println("> get");
-        System.out.println("(remote-file) : test3.txt");
-        System.out.println("(local-file) : local2.txt");
-        System.out.println("local : local2.txt remote: test3.txt");
-        dos.writeBytes("EPSV\r\n");
-        str = br.readLine(); 
-        System.out.println(str);
         // dir
         System.out.println("> dir");
         dos.writeBytes("LIST\r\n");
@@ -70,27 +63,31 @@ public class ClientFTP {
         dos.writeBytes("PATH FOR LIST :poipoi\r\n");
         str = br.readLine(); 
         System.out.println(str);
-        System.out.println("FILE    :fileTest.txt");
-        System.out.println("Directory    :home");
-        System.out.println("Directory    :dir");
+        // cd
         System.out.println("> cd dir");
         dos.writeBytes("CWD dir\r\n");
         str = br.readLine(); 
         System.out.println(str);
-        dos.writeBytes("Move into : poipoi/dir\r\n");
         // get
-        /* dos.writeBytes("RETR local2.txt\r\n");
+        System.out.println("> get");
+        System.out.println("(remote-file) : test3.txt");
+        System.out.println("(local-file) : local2.txt");
+        System.out.println("local : local2.txt remote: test3.txt");
+        dos.writeBytes("EPSV\r\n");
+        str = br.readLine(); 
+        System.out.println(str);
+        dos.writeBytes("RETR local2.txt\r\n");
         str = br.readLine(); 
         System.out.println(str);
         dos.writeBytes("path : poipoi/test3.txt\r\n");
         str = br.readLine(); 
-        System.out.println(str);  */
+        System.out.println(str);  
         // quit
         System.out.println("> quit");
         dos.writeBytes("QUIT\r\n");
+        dos.writeBytes("Deconnexion\r\n");
         str = br.readLine(); 
         System.out.println(str);
-        dos.writeBytes("Deconnexion\r\n");
     }
 
 }
