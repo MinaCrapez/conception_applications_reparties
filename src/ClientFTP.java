@@ -14,6 +14,8 @@ public class ClientFTP {
     private BufferedReader br;
     private DataOutputStream dos;
 
+    private static Socket socket;
+
     public ClientFTP(Socket socket) throws IOException {
         InputStream is = socket.getInputStream();
         OutputStream os = socket.getOutputStream();
@@ -26,7 +28,7 @@ public class ClientFTP {
     public static void main(String[] args) throws IOException {
         ip = args[0];
         port = Integer.parseInt(args[1]);
-        Socket socket = new Socket(ip,port);
+        socket = new Socket(ip,port);
         ClientFTP client = new ClientFTP(socket);
         System.out.println("Connected to "+ args[0]);
         client.run();
@@ -69,7 +71,7 @@ public class ClientFTP {
         str = br.readLine(); 
         System.out.println(str);
         // get
-        System.out.println("> get");
+       /*  System.out.println("> get");
         System.out.println("(remote-file) : test3.txt");
         System.out.println("(local-file) : local2.txt");
         System.out.println("local : local2.txt remote: test3.txt");
@@ -81,11 +83,10 @@ public class ClientFTP {
         System.out.println(str);
         dos.writeBytes("path : poipoi/test3.txt\r\n");
         str = br.readLine(); 
-        System.out.println(str);  
+        System.out.println(str);   */
         // quit
         System.out.println("> quit");
         dos.writeBytes("QUIT\r\n");
-        dos.writeBytes("Deconnexion\r\n");
         str = br.readLine(); 
         System.out.println(str);
     }
