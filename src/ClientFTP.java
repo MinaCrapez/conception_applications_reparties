@@ -74,7 +74,7 @@ public class ClientFTP {
         str = br.readLine(); 
         System.out.println(str);
         // put
-        System.out.println("> put local.txt");
+       /*  System.out.println("> put local.txt");
         dos.writeBytes("EPSV\r\n");
         str = br.readLine(); 
         System.out.println(str);
@@ -91,7 +91,7 @@ public class ClientFTP {
         System.out.println(str);
         dos.writeBytes("RETR test2.txt\r\n");
         str = br.readLine(); 
-        System.out.println(str);
+        System.out.println(str); */
         // quit
         System.out.println("> quit");
         dos.writeBytes("QUIT\r\n");
