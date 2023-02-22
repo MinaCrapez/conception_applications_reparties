@@ -1,18 +1,42 @@
 <html>
-CREATION COMPTE
 
-<form action="enregistrerCompte" method="post">
-        <label for="nom"> Nom :</label>
-        <input type="text" name="nom" id="nom" required>
-        <label for="prenom"> prenom :</label>
-        <input type="text" name="prenom" id="prenom" required>
-        <label for="email"> email :</label>
-        <input type="text" name="email" id="email" required>
-        <label for="mdp"> mot de passe :</label>
-        <input type="text" name="mdp" id="mdp" required>
-
-        <div class="button">
-            <button type ="submit"> creer le compte</button>
-        </div>
-</form>
+    <head>
+        <title>Creation de compte</title>
+        <meta charset = "utf-8">
+        <link rel="stylesheet" href="css/style.css">
+    </head>
+    
+    <body>
+    
+        <h1> Creation de compte </h1>
+    
+        <form action="enregistrerCompte" method="post">
+        
+            <div class="element_form">
+                <label for="nom"> Nom :</label>
+                <input type="text" name="nom" id="nom" required>
+            </div>
+            
+            <div class="element_form">
+                <label for="prenom"> Prenom :</label>
+                <input type="text" name="prenom" id="prenom" required>
+            </div>
+            
+            <div class="element_form">
+                <label for="email"> Adresse email :</label>
+                <input type="text" name="email" id="email" required>
+            </div>
+            
+            <div class="element_form">
+                <label for="mdp"> Mot de passe :</label>
+                <input type="password" name="mdp" id="mdp" required>
+            </div>
+            
+            <div class="button">
+                <button type ="submit"> Creer le compte</button>
+            </div>
+           
+        </form>
+    </body>
+    
 </html>
