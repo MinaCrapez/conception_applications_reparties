@@ -5,7 +5,7 @@
 
 -------------------
 
-##Projet en spring pour la gestion de fiche de présence.##
+## Projet en spring pour la gestion de fiche de présence. ##
 
 ------------------
 
