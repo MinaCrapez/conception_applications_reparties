@@ -8,4 +8,6 @@ public interface EtudiantRepository extends CrudRepository<Etudiant, Long> {
 	
 	Etudiant findByEmailAndMdp(String email, String mdp);
 
+	Etudiant findByEmail(String email);
+
 }

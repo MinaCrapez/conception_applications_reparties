@@ -31,9 +31,15 @@ public class CreationCompteController {
         etudiant.setPrenom(request.getParameter("prenom"));
         etudiant.setEmail(request.getParameter("email"));
         etudiant.setMdp(request.getParameter("mdp"));
-         //enregistrement de l'etudiant en BDD
-        er.save(etudiant); 
-        return "redirect:/authentification"; //On redirige vers la page de connexion
+         //enregistrement de l'etudiant en BDD s'il n'existe pas deja
+        if (er.findByEmail(request.getParameter("email")) == null) {
+            er.save(etudiant); 
+            return "redirect:/authentification"; //On redirige vers la page de connexion
+        }
+        else {
+            model.addAttribute("error","l'adresse email est déjà associée à un compte existant");
+            return "creationCompte";
+        }
     }
 
 }

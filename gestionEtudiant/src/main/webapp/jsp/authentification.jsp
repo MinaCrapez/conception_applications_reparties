@@ -27,7 +27,7 @@
                 <input type="password" name="mdp" id="mdp" required>
             </div>
         
-            <button type="submit"> Connection </button>
+            <button type="submit"> Connexion </button>
             
         </form>
         

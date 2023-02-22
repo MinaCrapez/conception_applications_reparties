@@ -9,7 +9,11 @@
     <body>
     
         <h1> Creation de compte </h1>
-    
+        
+        <div class="error">
+            <p>${error}</p>
+        </div>
+        
         <form action="enregistrerCompte" method="post">
         
             <div class="element_form">
