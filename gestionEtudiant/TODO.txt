@@ -1,9 +1,0 @@
-Un controller qui redirige vers la page de création de compte
-	=> Une jsp avec un formulaire de création de compte
-		=> Un controller qui enregistre le compte (puis redirige vers la page de connexion)
-		=> Recherche internet Spring boot authentication
-		
-Un controller qui redirige vers la page de connexion
-	=> Une jsp avec un formulaire de connexion
-		=> Un controller qui récupère login/mdp et redirige sur la page d'accueil si connexion OK, page de connexion sinon
-		=> Recherche internet Spring boot authentication

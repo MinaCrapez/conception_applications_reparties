@@ -25,12 +25,14 @@ public class CreationCompteController {
     
     @RequestMapping("/enregistrerCompte")
     public String enregistreCompte(HttpServletRequest request, Model model) {
+        // creation d'un etudiant
         Etudiant etudiant = new Etudiant();
         etudiant.setNom(request.getParameter("nom"));
         etudiant.setPrenom(request.getParameter("prenom"));
         etudiant.setEmail(request.getParameter("email"));
         etudiant.setMdp(request.getParameter("mdp"));
-        er.save(etudiant); //enregistrement de l'etudiant en BDD
+         //enregistrement de l'etudiant en BDD
+        er.save(etudiant); 
         return "redirect:/authentification"; //On redirige vers la page de connexion
     }
 
