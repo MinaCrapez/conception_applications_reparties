@@ -1,3 +1,0 @@
-<html>
-CREATION COMPTE
-</html>
