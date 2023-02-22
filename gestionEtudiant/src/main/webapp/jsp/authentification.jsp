@@ -6,23 +6,24 @@
 <p> identification :
 </p>
 
-<form action="pageAccueil">
-<div class="form-nom">
-	<label for="nom"> Nom :</label>
-	<input type="text" name="nom" id="nom" required>
+<form action="connexionCompte">
+<div class="form-email">
+    <label for="email"> email :</label>
+    <input type="text" name="email" id="email" required>
 </div>
-<div class="form-prenom">
-	<label for="prenom"> prenom :</label>
-	<input type="text" name="prenom" id="prenom" required>
+<div class="form-mdp">
+    <label for="mdp"> mot de passe :</label>
+    <input type="text" name="mdp" id="mdp" required>
 </div>
-	<input type="submit" value ="se connecter">
+    <button type="submit"> se Connecter</button>
 </form>
 
 <form action="creationCompte">
-	<div class="creationCompte">
-		<input type="submit" value ="creer un compte">
-	</div>
+    <div class="button_creation_compte">
+        <button type="submit"> Creer un compte</button>
+    </div>
 </form>
+
 
 </body>
 </html>
