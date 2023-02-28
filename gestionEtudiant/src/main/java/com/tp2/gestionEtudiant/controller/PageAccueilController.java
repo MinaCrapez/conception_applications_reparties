@@ -17,7 +17,7 @@ public class PageAccueilController {
     @Autowired
     private EtudiantRepository er;
     
-    @RequestMapping("connexionCompte")
+    @PostMapping("connexionCompte")
     public String connexionCompte(HttpServletRequest request, Model model) {
         // recuperation du login et mdp
         String login = request.getParameter("email");
@@ -32,7 +32,7 @@ public class PageAccueilController {
         }
         else { //Si pas d'utilisateur alors on redirige ves page de connexion avec une erreur
             model.addAttribute("error", "L'identifiant ou le mot de passe n'est pas correct");
-            return "redirect:/authentification";
+            return "authentification";
         }    
     } 
 

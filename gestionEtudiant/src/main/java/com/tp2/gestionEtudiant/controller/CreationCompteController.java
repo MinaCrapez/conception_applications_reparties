@@ -18,12 +18,12 @@ public class CreationCompteController {
     @Autowired
     private EtudiantRepository er;
     
-    @RequestMapping("/creationCompte")
+    @PostMapping("/creationCompte")
     public String creationDuCompte(Model model) {
         return "creationCompte";
     }
     
-    @RequestMapping("/enregistrerCompte")
+    @PostMapping("/enregistrerCompte")
     public String enregistreCompte(HttpServletRequest request, Model model) {
         // creation d'un etudiant
         Etudiant etudiant = new Etudiant();

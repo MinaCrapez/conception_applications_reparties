@@ -15,7 +15,7 @@
             <p>${error}</p>
         </div>
         
-        <form action="connexionCompte">
+        <form action="connexionCompte" method="post">
         
             <div class="form_email">
                 <label for="email"> Adresse email :</label>
@@ -31,7 +31,7 @@
             
         </form>
         
-        <form action="creationCompte">
+        <form action="creationCompte" method="post">
             <div class="button_creation_compte">
                 <button type="submit"> Creer un compte</button>
             </div>
