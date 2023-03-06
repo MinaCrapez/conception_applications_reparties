@@ -10,10 +10,10 @@ import com.tp2.gestionEtudiant.repository.EtudiantRepository;
 public class EtudiantService {
     
     @Autowired
-    private EtudiantRepository Er;
+    private EtudiantRepository er;
     
     public EtudiantRepository getEtudiantRepository () { 
-        return Er;
+        return er;
     }
 
 }

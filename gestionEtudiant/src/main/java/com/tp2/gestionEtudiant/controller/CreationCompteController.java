@@ -32,7 +32,7 @@ public class CreationCompteController {
          //enregistrement de l'etudiant en BDD s'il n'existe pas deja
         if (es.getEtudiantRepository().findByEmail(request.getParameter("email")) == null) {
             es.getEtudiantRepository().save(etudiant); 
-            return "redirect:/authentification"; //On redirige vers la page de connexion
+            return "authentification"; //On redirige vers la page de connexion
         }
         else {
             model.addAttribute("error","l'adresse email est déjà associée à un compte existant");

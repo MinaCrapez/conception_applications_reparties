@@ -21,3 +21,12 @@ Le site possédera un système de connexion et une gestion des feuilles de prés
 
 - allez sur **localhost:8080/authentification**.
 
+TODO :
+
+- corriger le forEach
+- corriger la recuperation fiche de presence pour suppression et affichage (probleme de type)
+- mettre plus d'attribut dans fiche de presence (date, liste de ligne)
+- CSS de la page d'accueil pour visibilite des fiches de presences
+- faire BDD pour les lignes (qui sont liés à une fiche de présence, date, heure, etudiant, blabla)
+- afficher en forEach les données des lignes dans fichedepresence.jsp
+- permettre leur creation dans fichedepresence.jsp et leur suppression (same que fiche de presence quoi)

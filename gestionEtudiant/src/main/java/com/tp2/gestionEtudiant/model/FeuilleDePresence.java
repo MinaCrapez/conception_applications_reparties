@@ -7,7 +7,7 @@ import jakarta.persistence.Id;
 @Entity
 public class FeuilleDePresence {
     
-    private long id;
+    private int id;
     private String mailEtudiant;
     //private List<Ligne> ligne;
     
@@ -15,10 +15,10 @@ public class FeuilleDePresence {
     
     @Id
     @GeneratedValue
-    public long getId() {
+    public int getId() {
         return id;
     }
-    public void setId(long id) {
+    public void setId(int id) {
         this.id = id;
     }
     

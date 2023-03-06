@@ -12,4 +12,6 @@ public interface FeuilleDePresenceRepository  extends CrudRepository<FeuilleDePr
     
     public List<FeuilleDePresence> findByMailEtudiant (String mailEtudiant);
 
+    public FeuilleDePresence findById(int id);
+
 }
