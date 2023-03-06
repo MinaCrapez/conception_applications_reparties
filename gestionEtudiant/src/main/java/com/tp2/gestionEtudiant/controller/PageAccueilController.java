@@ -4,10 +4,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.tp2.gestionEtudiant.model.Etudiant;
-import com.tp2.gestionEtudiant.repository.EtudiantRepository;
+import com.tp2.gestionEtudiant.service.EtudiantService;
 
 import jakarta.servlet.http.HttpServletRequest;
 
@@ -15,7 +14,7 @@ import jakarta.servlet.http.HttpServletRequest;
 public class PageAccueilController {
     
     @Autowired
-    private EtudiantRepository er;
+    private EtudiantService es;
     
     @PostMapping("connexionCompte")
     public String connexionCompte(HttpServletRequest request, Model model) {
@@ -24,7 +23,7 @@ public class PageAccueilController {
         String password = request.getParameter("mdp");
         
         // on verifie qu'un etudiant avec ces identifiants existe
-        Etudiant etudiant = er.findByEmailAndMdp(login, password);
+        Etudiant etudiant = es.getEtudiantRepository().findByEmailAndMdp(login, password);
         
         if(etudiant != null) { // s'il existe, on envoie vers la page d'accueil
             model.addAttribute("etudiant", etudiant);

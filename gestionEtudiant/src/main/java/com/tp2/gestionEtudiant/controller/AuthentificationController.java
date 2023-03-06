@@ -5,14 +5,14 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import com.tp2.gestionEtudiant.repository.EtudiantRepository;
+import com.tp2.gestionEtudiant.service.EtudiantService;
 
 @Controller
 public class AuthentificationController {
 	
 	
 	@Autowired
-	private EtudiantRepository Er;
+	private EtudiantService es;
 	
 	@RequestMapping("/authentification")
 	public String authen(Model model) {
