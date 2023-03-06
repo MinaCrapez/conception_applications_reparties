@@ -51,16 +51,18 @@ public class FicheDePresenceController {
 	@PostMapping("/suppressionFichePresence")
 	public String suppressionFichePresence(HttpServletRequest request, Model model) {
 		// recuperation de l'étudiant
+		String idFeuille = request.getParameter("idFeuille");
 		String mailEtudiant = request.getParameter("mailEtudiant");
 		String mdpEtudiant = request.getParameter("mdpEtudiant");
+
 		Etudiant etudiant = es.getEtudiantRepository().findByEmailAndMdp(mailEtudiant, mdpEtudiant);
 		
 		// recuperation de la feuille de presence
-		int id = Integer.parseInt(request.getParameter("idFeuille"));
-		FeuilleDePresence feuille = fps.getFeuilleDePresenceRepository().findById(id);
+		long id = Long.parseLong(idFeuille);
+		//Optional<FeuilleDePresence> feuille = fps.getFeuilleDePresenceRepository().findById(id);
 		
 		//suppression de la feuille de presence
-		fps.getFeuilleDePresenceRepository().delete(feuille);
+		fps.getFeuilleDePresenceRepository().deleteById(id);
 		
 		// passage des nouveaux attributs à la jsp
 		List<FeuilleDePresence> feuillesPres;
@@ -74,18 +76,18 @@ public class FicheDePresenceController {
 	@PostMapping("/affichageFichePresence")
 	public String affichageFichePresence(HttpServletRequest request, Model model) {
 		// recuperation de l'étudiant
+		String idFeuille = request.getParameter("idFeuille");
 		String mailEtudiant = request.getParameter("mailEtudiant");
 		String mdpEtudiant = request.getParameter("mdpEtudiant");
+		
 		Etudiant etudiant = es.getEtudiantRepository().findByEmailAndMdp(mailEtudiant, mdpEtudiant);
 		
 		// recuperation de la feuille de presence
-		int id = Integer.parseInt(request.getParameter("idFeuille"));
-		FeuilleDePresence feuille = fps.getFeuilleDePresenceRepository().findById(id);
+		long id = Long.parseLong(idFeuille);
+		Optional<FeuilleDePresence> ficheDePresence = fps.getFeuilleDePresenceRepository().findById(id);
 		
 		// passage des nouveaux attributs à la jsp
-		List<FeuilleDePresence> feuillesPres;
-		feuillesPres = fps.getFeuilleDePresenceRepository().findByMailEtudiant(mailEtudiant);
-		model.addAttribute("feuillesPres",feuillesPres);
+		model.addAttribute("ficheDePresence",ficheDePresence);
 		model.addAttribute("etudiant",etudiant);
 		
 		return "ficheDePresence";
