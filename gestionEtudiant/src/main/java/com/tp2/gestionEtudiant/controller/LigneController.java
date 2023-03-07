@@ -61,8 +61,8 @@ public class LigneController {
 		// passage des nouveaux attributs à la jsp
 		List<Ligne> lignes;
 		lignes = ls.getLigneRepository().findByFeuilleDePresence(idFiche);
-        model.addattribute("lignes",lignes);
-		model.addattribute("etudiant",etudiant);
+        model.addAttribute("lignes",lignes);
+		model.addAttribute("etudiant",etudiant);
 		model.addAttribute("ficheDePresence",ficheDePresence);
 
         return "ficheDePresence";
@@ -88,8 +88,8 @@ public class LigneController {
 		// passage des nouveaux attributs à la jsp
         List<Ligne> lignes;
 		lignes = ls.getLigneRepository().findByFeuilleDePresence(idFeuille);
-		model.addattribute("lignes",lignes);
-		model.addattribute("etudiant",etudiant);
+		model.addAttribute("lignes",lignes);
+		model.addAttribute("etudiant",etudiant);
 		model.addAttribute("ficheDePresence",ficheDePresence);
 
         return "ficheDePresence";
