@@ -25,8 +25,6 @@ TODO :
 
 - faire les bouton de retour
 - enum mois
-- corriger la recuperation fiche de presence pour suppression et affichage (probleme de type)
-- mettre plus d'attribut dans fiche de presence (date, liste de ligne)
 - CSS de la page d'accueil pour visibilite des fiches de presences
-- faire BDD pour les lignes (qui sont liés à une fiche de présence, date, heure, etudiant, blabla)
-- permettre leur creation dans fichedepresence.jsp et leur suppression (same que fiche de presence quoi)
+- CSS lignes
+- ajout signature sur les lignes

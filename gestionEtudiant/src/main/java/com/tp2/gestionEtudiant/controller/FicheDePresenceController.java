@@ -12,8 +12,11 @@ import org.springframework.web.bind.annotation.PostMapping;
 
 import com.tp2.gestionEtudiant.model.Etudiant;
 import com.tp2.gestionEtudiant.model.FeuilleDePresence;
+import com.tp2.gestionEtudiant.model.Ligne;
 import com.tp2.gestionEtudiant.service.EtudiantService;
 import com.tp2.gestionEtudiant.service.FeuilleDePresenceService;
+import com.tp2.gestionEtudiant.service.LigneService;
+
 
 import jakarta.servlet.http.HttpServletRequest;
 
@@ -25,6 +28,9 @@ public class FicheDePresenceController {
 	
 	@Autowired
 	private FeuilleDePresenceService fps;
+
+	@Autowired
+	private LigneService ls;
 	
 	@PostMapping("/creationFeuillePresence")
 	public String creationFeuillePresence(HttpServletRequest request, Model model) {
@@ -33,15 +39,15 @@ public class FicheDePresenceController {
 		String mdpEtudiant = request.getParameter("mdpEtudiant");
 		Etudiant etudiant = es.getEtudiantRepository().findByEmailAndMdp(mailEtudiant, mdpEtudiant);
 		
-		// recuperation de la date
+		// recuperation du mois et de l'annee
 		Date aujourdhui = new Date();
-		SimpleDateFormat formater = new SimpleDateFormat("dd-MM-yy");
+		SimpleDateFormat formater = new SimpleDateFormat("MM-yy");
     	String date = formater.format(aujourdhui);
 
 		// creation feuille de presence
 		FeuilleDePresence feuilleDePresence = new FeuilleDePresence();
 		feuilleDePresence.setMailEtudiant(mailEtudiant);
-		feuilleDePresence.setDate(date);
+		feuilleDePresence.setMoisAnnee(date);
 
 		//enregistrement en BDD de la feuille de présence 
 		fps.getFeuilleDePresenceRepository().save(feuilleDePresence);
@@ -67,7 +73,6 @@ public class FicheDePresenceController {
 		
 		// recuperation de la feuille de presence
 		long id = Long.parseLong(idFeuille);
-		//Optional<FeuilleDePresence> feuille = fps.getFeuilleDePresenceRepository().findById(id);
 		
 		//suppression de la feuille de presence
 		fps.getFeuilleDePresenceRepository().deleteById(id);
@@ -92,10 +97,14 @@ public class FicheDePresenceController {
 		
 		// recuperation de la feuille de presence
 		long id = Long.parseLong(idFeuille);
-		Optional<FeuilleDePresence> ficheDePresence = fps.getFeuilleDePresenceRepository().findById(id);
+		FeuilleDePresence ficheDePresence = fps.getFeuilleDePresenceRepository().findById(id);
+
+		// recuperation des lignes
+		List<Ligne> lignes = ls.getLigneRepository().findByFeuilleDePresence(id);
 		
 		// passage des nouveaux attributs à la jsp
 		model.addAttribute("ficheDePresence",ficheDePresence);
+		model.addAttribute("lignes",lignes);
 		model.addAttribute("etudiant",etudiant);
 		
 		return "ficheDePresence";

@@ -4,7 +4,6 @@ import java.util.List;
 
 import org.springframework.data.repository.CrudRepository;
 
-import com.tp2.gestionEtudiant.model.Etudiant;
 import com.tp2.gestionEtudiant.model.Ligne;
 
 
