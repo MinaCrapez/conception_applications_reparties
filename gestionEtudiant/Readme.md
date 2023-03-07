@@ -27,4 +27,4 @@ TODO :
 - enum mois
 - CSS de la page d'accueil pour visibilite des fiches de presences
 - CSS lignes
-- ajout signature sur les lignes
+- corriger le changement de signature sur les lignes

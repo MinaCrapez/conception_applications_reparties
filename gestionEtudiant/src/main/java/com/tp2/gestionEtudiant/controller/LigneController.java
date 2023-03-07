@@ -41,17 +41,19 @@ public class LigneController {
 		long idFiche = Long.parseLong(request.getParameter("idFiche"));
 		FeuilleDePresence ficheDePresence = fps.getFeuilleDePresenceRepository().findById(idFiche);
 
-        // recuperation de l'heure
-        Date aujourdhui = new Date();
-		SimpleDateFormat formater = new SimpleDateFormat("HH:mm:ss");
-    	String heure = formater.format(aujourdhui);
+        // recuperation des autres donnees
+		String matiere = request.getParameter("matiere");
+		String heureDebut = request.getParameter("heureDebut");
+		String heureFin = request.getParameter("heureFin");
+		String jour = request.getParameter("jour");
 
 		// creation de la ligne
         Ligne ligne = new Ligne();
         ligne.setFeuilleDePresence(idFiche);
-        ligne.setHeure(heure);
-		String matiere = request.getParameter("matiere");
-        ligne.setMatiere(matiere);
+		ligne.setMatiere(matiere);
+        ligne.setHeureDebut(heureDebut);
+		ligne.setHeureFin(heureFin);
+		ligne.setJour(jour);
 
 		//enregistrement en BDD de la ligne 
 		ls.getLigneRepository().save(ligne);
@@ -60,6 +62,7 @@ public class LigneController {
 		List<Ligne> lignes;
 		lignes = ls.getLigneRepository().findByFeuilleDePresence(idFiche);
         model.addattribute("lignes",lignes);
+		model.addattribute("etudiant",etudiant);
 		model.addAttribute("ficheDePresence",ficheDePresence);
 
         return "ficheDePresence";
@@ -86,8 +89,23 @@ public class LigneController {
         List<Ligne> lignes;
 		lignes = ls.getLigneRepository().findByFeuilleDePresence(idFeuille);
 		model.addattribute("lignes",lignes);
+		model.addattribute("etudiant",etudiant);
 		model.addAttribute("ficheDePresence",ficheDePresence);
 
         return "ficheDePresence";
 	}
+
+	@PostMapping("/changementSignature")
+    public String changementSignature(HttpServletRequest request, Model model) {
+        // recuperer les nouvelles valeurs de signature
+        String nouvSignatureEtudiant = request.getParameter("nouvSignatureEtudiant");
+        String nouvSignatureProf = request.getParameter("nouvSignatureProf");
+        
+        //recuperation de la ligne
+        // il faut passer l'attribut de la ligne egalement comme pour les signatures
+        
+        // setter les valeurs a la ligne
+        
+        return "ficheDePresence";
+    }
 }

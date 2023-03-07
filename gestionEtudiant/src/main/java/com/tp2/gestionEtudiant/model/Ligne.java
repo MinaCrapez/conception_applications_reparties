@@ -8,9 +8,13 @@ import jakarta.persistence.Id;
 public class Ligne {
 
     private long id;
-    private long feuilleDePresence;
     private String matiere;
-    private String heure;
+    private String heureDebut;
+    private String heureFin;
+    private String jour;
+    private long feuilleDePresence;
+    private Boolean signatureEtudiant;
+    private Boolean signatureProf;
 
     public Ligne() {}
 
@@ -20,7 +24,7 @@ public class Ligne {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(long id) {
         this.id = id;
     }
 
@@ -32,12 +36,28 @@ public class Ligne {
         this.matiere = matiere;
     }
 
-    public String getHeure() {
-        return heure;
+    public String getHeureDebut() {
+        return heureDebut;
     }
 
-    public void setHeure(String heure) {
-        this.heure = heure;
+    public void setHeureDebut(String heureDebut) {
+        this.heureDebut = heureDebut;
+    }
+
+    public String getHeureFin() {
+        return heureFin;
+    }
+
+    public void setHeureFin(String heureFin) {
+        this.heureFin = heureFin;
+    }
+
+    public String getJour() {
+        return jour;
+    }
+
+    public void setJour(String jour) {
+        this.jour = jour;
     }
 
     public long getFeuilleDePresence() {
@@ -48,5 +68,22 @@ public class Ligne {
         this.feuilleDePresence = feuilleDePresence;
     }
 
-    
+    public Boolean getSignatureEtudiant() {
+          return signatureEtudiant;
+      }
+
+      public void setSignatureEtudiant(Boolean signatureEtudiant) {
+          this.signatureEtudiant = signatureEtudiant;
+      }
+
+      public Boolean getSignatureProf() {
+          return signatureProf;
+      }
+
+      public void setSignatureProf(Boolean signatureProf) {
+          this.signatureProf = signatureProf;
+      }
+
+
+
 }
