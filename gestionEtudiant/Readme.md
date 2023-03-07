@@ -25,6 +25,5 @@ TODO :
 
 - faire les bouton de retour
 - enum mois
-- CSS de la page d'accueil pour visibilite des fiches de presences
-- CSS lignes
+- changement formulaire creation ligne (choix de jour, heure de type heure)
 - corriger le changement de signature sur les lignes
