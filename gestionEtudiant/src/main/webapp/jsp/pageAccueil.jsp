@@ -17,35 +17,41 @@
 		
 		<p>Bienvenue sur votre espace de gestion. <p>
 		
-		<p> liste des fiches de présences :</p>
-		<ul>
-		
-		<%
-		Etudiant etudiant = (Etudiant) request.getAttribute("etudiant");
-		List<FeuilleDePresence> fiches = (List<FeuilleDePresence>) request.getAttribute("feuillesPres");
-		
-		for(FeuilleDePresence fiche : fiches) {
-			out.print("<li> feuille de presence du "+ fiche.getMoisAnnee());
+			<table>
+				<thead>
+					<tr>
+						<th colspan="3">Liste des feuilles de présence </th>
+					</tr>
+				</thead>
+				<tbody>
 			
-			out.print("<form action=\"affichageFichePresence\" method=\"post\">");
-			out.print("<input type=\"hidden\" name=\"mailEtudiant\" value=" +etudiant.getEmail()+">");
-			out.print("<input type=\"hidden\" name=\"mdpEtudiant\" value=" +etudiant.getMdp()+">");
-			out.print("<input type=\"hidden\" name=\"idFeuille\" value=" +fiche.getId()+">");
-			out.print("<button type=\"submit\"> afficher </button>");
-			out.print("</form>");
+			<%
+			Etudiant etudiant = (Etudiant) request.getAttribute("etudiant");
+			List<FeuilleDePresence> fiches = (List<FeuilleDePresence>) request.getAttribute("feuillesPres");
 			
-			out.print("<form action=\"suppressionFichePresence\" method=\"post\">");
-			out.print("<input type=\"hidden\" name=\"mailEtudiant\" value=" +etudiant.getEmail()+">");
-			out.print("<input type=\"hidden\" name=\"mdpEtudiant\" value=" +etudiant.getMdp()+">");
-			out.print("<input type=\"hidden\" name=\"idFeuille\" value=" +fiche.getId()+">");
-			out.print("<button type=\"submit\"> supprimer </button>");
-			out.print("</form>");
-			out.print("</li>");
-			
-			
-		}	
-			%>
-		</ul>
+			for(FeuilleDePresence fiche : fiches) {
+				out.print("<tr><td> feuille de presence du "+ fiche.getMoisAnnee()+"</td>");
+				
+				out.print("<td> <form action=\"affichageFichePresence\" method=\"post\">");
+				out.print("<input type=\"hidden\" name=\"mailEtudiant\" value=" +etudiant.getEmail()+">");
+				out.print("<input type=\"hidden\" name=\"mdpEtudiant\" value=" +etudiant.getMdp()+">");
+				out.print("<input type=\"hidden\" name=\"idFeuille\" value=" +fiche.getId()+">");
+				out.print("<button type=\"submit\"> afficher </button>");
+				out.print("</form> </td>");
+				
+				out.print(" <td> <form action=\"suppressionFichePresence\" method=\"post\">");
+				out.print("<input type=\"hidden\" name=\"mailEtudiant\" value=" +etudiant.getEmail()+">");
+				out.print("<input type=\"hidden\" name=\"mdpEtudiant\" value=" +etudiant.getMdp()+">");
+				out.print("<input type=\"hidden\" name=\"idFeuille\" value=" +fiche.getId()+">");
+				out.print("<button type=\"submit\"> supprimer </button>");
+				out.print("</form> </td>");
+				out.print("</tr>");
+				
+				
+			}    
+				%>
+				</tbody>
+			</table>
 		
 		<form action="creationFeuillePresence" method="post">
 			<div class="button_creation_feuille">
