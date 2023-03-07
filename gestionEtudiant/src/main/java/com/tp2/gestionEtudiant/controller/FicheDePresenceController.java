@@ -1,5 +1,7 @@
 package com.tp2.gestionEtudiant.controller;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -31,10 +33,16 @@ public class FicheDePresenceController {
 		String mdpEtudiant = request.getParameter("mdpEtudiant");
 		Etudiant etudiant = es.getEtudiantRepository().findByEmailAndMdp(mailEtudiant, mdpEtudiant);
 		
+		// recuperation de la date
+		Date aujourdhui = new Date();
+		SimpleDateFormat formater = new SimpleDateFormat("dd-MM-yy");
+    	String date = formater.format(aujourdhui);
+
 		// creation feuille de presence
 		FeuilleDePresence feuilleDePresence = new FeuilleDePresence();
 		feuilleDePresence.setMailEtudiant(mailEtudiant);
-		
+		feuilleDePresence.setDate(date);
+
 		//enregistrement en BDD de la feuille de présence 
 		fps.getFeuilleDePresenceRepository().save(feuilleDePresence);
 		

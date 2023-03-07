@@ -1,5 +1,7 @@
 package com.tp2.gestionEtudiant.model;
 
+import java.util.List;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
@@ -9,8 +11,8 @@ public class FeuilleDePresence {
     
     private long id;
     private String mailEtudiant;
-    private String mois;
-    //private List<Ligne> ligne;
+    private String date;
+    private List<Ligne> lignes;
     
     public FeuilleDePresence() {}
     
@@ -31,20 +33,19 @@ public class FeuilleDePresence {
         this.mailEtudiant = mailEtudiant;
     }
 
-    public String getMois() {
-        return mois;
+    public String getDate() {
+        return date;
     }
 
-    public void setMois(String mois) {
-        this.mois = mois;
+    public void setDate(String date) {
+        this.date = date;
     }
 
-    /**public List<Ligne> getLigne() {
-        return ligne;
+    public List<Ligne> getLignes() {
+        return lignes;
     }
 
-    public void setLigne(List<Ligne> ligne) {
-        this.ligne = ligne;
+    public void setLigne(List<Ligne> lignes) {
+        this.lignes = lignes;
     }
-**/
 }

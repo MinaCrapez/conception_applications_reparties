@@ -25,7 +25,7 @@
 		List<FeuilleDePresence> fiches = (List<FeuilleDePresence>) request.getAttribute("feuillesPres");
 		
 		for(FeuilleDePresence fiche : fiches) {
-			out.print("<li> feuille de presence numéro "+ fiche.getId());
+			out.print("<li> Fiche.getMois());
 			
 			out.print("<form action=\"affichageFichePresence\" method=\"post\">");
 			out.print("<input type=\"hidden\" name=\"mailEtudiant\" value=" +etudiant.getEmail()+">");

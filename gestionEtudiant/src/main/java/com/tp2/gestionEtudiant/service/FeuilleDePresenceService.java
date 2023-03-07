@@ -4,7 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import com.tp2.gestionEtudiant.repository.FeuilleDePresenceRepository;
 
-
+@Service
 public class FeuilleDePresenceService {
     
     @Autowired
