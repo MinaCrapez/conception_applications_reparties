@@ -12,10 +12,8 @@
 
     <body>
 
-        <h1> Fiche de prÃ©sence de la date : ${ficheDePresence.moisAnnee} </h1>
-
-        <p> Etudiant : ${etudiant.prenom} ${etudiant.nom} </p>
-
+        <p> Etudiant : ${ficheDePresence.etudiant.prenom} ${ficheDePresence.etudiant.nom} </p>
+        
         <table>
     		<thead>
         		<tr>
@@ -25,24 +23,20 @@
     		<tbody>
         
             <%
-            Etudiant etudiant = (Etudiant) request.getAttribute("etudiant");
-            List<Ligne> lignes = (List<Ligne>) request.getAttribute("lignes");
             FeuilleDePresence ficheDePresence = (FeuilleDePresence) request.getAttribute("ficheDePresence");
             
-            for(Ligne ligne : lignes) {
+            for(Ligne ligne : ficheDePresence.getLignes()) {
                 out.print("<tr> <td>Heure Debut : "+ ligne.getHeureDebut()+"</td>");
                 out.print("<td> Heure fin : " + ligne.getHeureFin()+"</td>");
                 out.print("<td> Matiere : " + ligne.getMatiere()+"</td>");
                 out.print("<td> <label for=\"signature etudiant\"> Signature de l'etudiant </label>");
-                out.print("<td> <input type=\"checkbox\"value="+ligne.getSignatureEtudiant()+"id=\"signatureEtudiant\"> </td>");
+                out.print("<td> <input type=\"checkbox\"value="+ligne.getSignatureEtudiant()+"id=\"signatureEtudiant\" > </td>");
                 out.print("<td> <label for=\"signature professeur\"> Signature du professeur </label>");
                 out.print("<td> <input type=\"checkbox\" value="+ligne.getSignatureProf()+ "id=\"signatureProfesseur\"> </td>");
 
                 out.print("<td> <form action=\"suppressionLigne\" method=\"post\">");
                 out.print("<input type=\"hidden\" name=\"idFeuille\" value=" +ficheDePresence.getId()+">");
                 out.print("<input type=\"hidden\" name=\"idLigne\" value=" +ligne.getId()+">");
-                out.print("<input type=\"hidden\" name=\"mailEtudiant\" value=" +etudiant.getEmail()+">");
-    			out.print("<input type=\"hidden\" name=\"mdpEtudiant\" value=" +etudiant.getMdp()+">");
                 out.print("<button type=\"submit\"> supprimer </button>");
                 out.print("</form> </td>");
 
@@ -52,7 +46,7 @@
             %>
             </tbody>
 		</table>
-        
+
         <form action="creationLigne" method="post">
             <div class="button_creation_ligne">
                 <button type="submit"> Creer une ligne </button>
@@ -66,9 +60,7 @@
                 <input type="text" name="heureFin" id="heureFin" required>
                 
                 
-                <input type="hidden" name="idFiche" value=${ficheDePresence.id}>
-                <input type="hidden" name="mailEtudiant" value=${etudiant.email}>
-				<input type="hidden" name="mdpEtudiant" value=${etudiant.mdp}>
+                <input type="hidden" name="idFiche" value=${ficheDePresence.id}>   
          
             </div>
         </form>

@@ -23,7 +23,6 @@ Le site possédera un système de connexion et une gestion des feuilles de prés
 
 TODO :
 
-
 - faire les bouton de retour
 - enum mois
 - changement formulaire creation ligne (choix de jour, heure de type heure)

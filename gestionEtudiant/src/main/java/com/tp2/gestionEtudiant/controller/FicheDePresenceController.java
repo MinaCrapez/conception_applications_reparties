@@ -3,7 +3,6 @@ package com.tp2.gestionEtudiant.controller;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -17,7 +16,6 @@ import com.tp2.gestionEtudiant.service.EtudiantService;
 import com.tp2.gestionEtudiant.service.FeuilleDePresenceService;
 import com.tp2.gestionEtudiant.service.LigneService;
 
-
 import jakarta.servlet.http.HttpServletRequest;
 
 @Controller
@@ -28,7 +26,7 @@ public class FicheDePresenceController {
 	
 	@Autowired
 	private FeuilleDePresenceService fps;
-
+	
 	@Autowired
 	private LigneService ls;
 	
@@ -44,12 +42,9 @@ public class FicheDePresenceController {
 		SimpleDateFormat formater = new SimpleDateFormat("MM-yy");
 		String date = formater.format(aujourdhui);
 				
-		fps.creer(mailEtudiant,date);
+		fps.creer(etudiant,date);
 		
 		// passage des nouveaux attributs à la jsp
-		List<FeuilleDePresence> feuillesPres;
-		feuillesPres = fps.findByMailEtudiant(mailEtudiant);
-		model.addAttribute("feuillesPres",feuillesPres);
 		model.addAttribute("etudiant",etudiant);
 		
 		return "pageAccueil";
@@ -58,23 +53,20 @@ public class FicheDePresenceController {
 	
 	@PostMapping("/suppressionFichePresence")
 	public String suppressionFichePresence(HttpServletRequest request, Model model) {
-		// recuperation de l'étudiant
-		String idFeuille = request.getParameter("idFeuille");
-		String mailEtudiant = request.getParameter("mailEtudiant");
-		String mdpEtudiant = request.getParameter("mdpEtudiant");
-
-		Etudiant etudiant = es.findByEmailAndMdp(mailEtudiant, mdpEtudiant);
-		
 		// recuperation de la feuille de presence
+		String idFeuille = request.getParameter("idFeuille");
 		long id = Long.parseLong(idFeuille);
 		
 		//suppression de la feuille de presence
 		fps.deleteById(id);
 		
+		// recuperation de l'étudiant
+		String mailEtudiant = request.getParameter("mailEtudiant");
+		String mdpEtudiant = request.getParameter("mdpEtudiant");
+
+		Etudiant etudiant = es.findByEmailAndMdp(mailEtudiant, mdpEtudiant);
+		
 		// passage des nouveaux attributs à la jsp
-		List<FeuilleDePresence> feuillesPres;
-		feuillesPres = fps.findByMailEtudiant(mailEtudiant);
-		model.addAttribute("feuillesPres",feuillesPres);
 		model.addAttribute("etudiant",etudiant);
 		
 		return "pageAccueil";
@@ -82,24 +74,14 @@ public class FicheDePresenceController {
 	
 	@PostMapping("/affichageFichePresence")
 	public String affichageFichePresence(HttpServletRequest request, Model model) {
-		// recuperation de l'étudiant
-		String idFeuille = request.getParameter("idFeuille");
-		String mailEtudiant = request.getParameter("mailEtudiant");
-		String mdpEtudiant = request.getParameter("mdpEtudiant");
-		
-		Etudiant etudiant = es.findByEmailAndMdp(mailEtudiant, mdpEtudiant);
-		
 		// recuperation de la feuille de presence
+		String idFeuille = request.getParameter("idFeuille");
 		long id = Long.parseLong(idFeuille);
 		FeuilleDePresence ficheDePresence = fps.findById(id);
 		
-		// recuperation de mes lignes
-		List<Ligne> lignes = ls.findByFeuilleDePresence(id);
-		
 		// passage des nouveaux attributs à la jsp
 		model.addAttribute("ficheDePresence",ficheDePresence);
-		model.addAttribute("lignes",lignes);
-		model.addAttribute("etudiant",etudiant);
+		model.addAttribute("etudiant",ficheDePresence.getEtudiant());
 		
 		return "ficheDePresence";
 	}

@@ -3,23 +3,27 @@ package com.tp2.gestionEtudiant.model;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
+import jakarta.persistence.ManyToOne;
 
 @Entity
 public class Ligne {
 
+    @Id
+    @GeneratedValue
     private long id;
+
+    @ManyToOne
+    private FeuilleDePresence feuilleDePresence;
+
     private String matiere;
     private String heureDebut;
     private String heureFin;
     private String jour;
-    private long feuilleDePresence;
     private Boolean signatureEtudiant;
     private Boolean signatureProf;
 
     public Ligne() {}
 
-    @Id
-    @GeneratedValue
     public long getId() {
         return id;
     }
@@ -60,11 +64,11 @@ public class Ligne {
         this.jour = jour;
     }
 
-    public long getFeuilleDePresence() {
+    public FeuilleDePresence getFeuilleDePresence() {
         return feuilleDePresence;
     }
 
-    public void setFeuilleDePresence(long feuilleDePresence) {
+    public void setFeuilleDePresence(FeuilleDePresence feuilleDePresence) {
         this.feuilleDePresence = feuilleDePresence;
     }
 
