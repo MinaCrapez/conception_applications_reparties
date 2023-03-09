@@ -37,24 +37,18 @@ public class FicheDePresenceController {
 		// recuperation de l'étudiant
 		String mailEtudiant = request.getParameter("mailEtudiant");
 		String mdpEtudiant = request.getParameter("mdpEtudiant");
-		Etudiant etudiant = es.getEtudiantRepository().findByEmailAndMdp(mailEtudiant, mdpEtudiant);
+		Etudiant etudiant = es.findByEmailAndMdp(mailEtudiant, mdpEtudiant);
 		
-		// recuperation du mois et de l'annee
+		//recuperation du mois et de l'annee
 		Date aujourdhui = new Date();
 		SimpleDateFormat formater = new SimpleDateFormat("MM-yy");
-    	String date = formater.format(aujourdhui);
-
-		// creation feuille de presence
-		FeuilleDePresence feuilleDePresence = new FeuilleDePresence();
-		feuilleDePresence.setMailEtudiant(mailEtudiant);
-		feuilleDePresence.setMoisAnnee(date);
-
-		//enregistrement en BDD de la feuille de présence 
-		fps.getFeuilleDePresenceRepository().save(feuilleDePresence);
+		String date = formater.format(aujourdhui);
+				
+		fps.creer(mailEtudiant,date);
 		
 		// passage des nouveaux attributs à la jsp
 		List<FeuilleDePresence> feuillesPres;
-		feuillesPres = fps.getFeuilleDePresenceRepository().findByMailEtudiant(mailEtudiant);
+		feuillesPres = fps.findByMailEtudiant(mailEtudiant);
 		model.addAttribute("feuillesPres",feuillesPres);
 		model.addAttribute("etudiant",etudiant);
 		
@@ -69,17 +63,17 @@ public class FicheDePresenceController {
 		String mailEtudiant = request.getParameter("mailEtudiant");
 		String mdpEtudiant = request.getParameter("mdpEtudiant");
 
-		Etudiant etudiant = es.getEtudiantRepository().findByEmailAndMdp(mailEtudiant, mdpEtudiant);
+		Etudiant etudiant = es.findByEmailAndMdp(mailEtudiant, mdpEtudiant);
 		
 		// recuperation de la feuille de presence
 		long id = Long.parseLong(idFeuille);
 		
 		//suppression de la feuille de presence
-		fps.getFeuilleDePresenceRepository().deleteById(id);
+		fps.deleteById(id);
 		
 		// passage des nouveaux attributs à la jsp
 		List<FeuilleDePresence> feuillesPres;
-		feuillesPres = fps.getFeuilleDePresenceRepository().findByMailEtudiant(mailEtudiant);
+		feuillesPres = fps.findByMailEtudiant(mailEtudiant);
 		model.addAttribute("feuillesPres",feuillesPres);
 		model.addAttribute("etudiant",etudiant);
 		
@@ -93,14 +87,14 @@ public class FicheDePresenceController {
 		String mailEtudiant = request.getParameter("mailEtudiant");
 		String mdpEtudiant = request.getParameter("mdpEtudiant");
 		
-		Etudiant etudiant = es.getEtudiantRepository().findByEmailAndMdp(mailEtudiant, mdpEtudiant);
+		Etudiant etudiant = es.findByEmailAndMdp(mailEtudiant, mdpEtudiant);
 		
 		// recuperation de la feuille de presence
 		long id = Long.parseLong(idFeuille);
-		FeuilleDePresence ficheDePresence = fps.getFeuilleDePresenceRepository().findById(id);
-
-		// recuperation des lignes
-		List<Ligne> lignes = ls.getLigneRepository().findByFeuilleDePresence(id);
+		FeuilleDePresence ficheDePresence = fps.findById(id);
+		
+		// recuperation de mes lignes
+		List<Ligne> lignes = ls.findByFeuilleDePresence(id);
 		
 		// passage des nouveaux attributs à la jsp
 		model.addAttribute("ficheDePresence",ficheDePresence);

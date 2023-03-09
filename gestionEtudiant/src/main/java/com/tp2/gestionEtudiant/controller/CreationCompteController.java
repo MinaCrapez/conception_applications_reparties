@@ -23,15 +23,11 @@ public class CreationCompteController {
     
     @PostMapping("/enregistrerCompte")
     public String enregistreCompte(HttpServletRequest request, Model model) {
-        // creation d'un etudiant
-        Etudiant etudiant = new Etudiant();
-        etudiant.setNom(request.getParameter("nom"));
-        etudiant.setPrenom(request.getParameter("prenom"));
-        etudiant.setEmail(request.getParameter("email"));
-        etudiant.setMdp(request.getParameter("mdp"));
-         //enregistrement de l'etudiant en BDD s'il n'existe pas deja
-        if (es.getEtudiantRepository().findByEmail(request.getParameter("email")) == null) {
-            es.getEtudiantRepository().save(etudiant); 
+        String nom = request.getParameter("nom");
+        String prenom = request.getParameter("prenom");
+        String email = request.getParameter("email");
+        String mdp = request.getParameter("mdp");
+        if (es.creer(nom, prenom, email, mdp)) { // si on a pu creer l'étudiant
             return "authentification"; //On redirige vers la page de connexion
         }
         else {
@@ -39,5 +35,4 @@ public class CreationCompteController {
             return "creationCompte";
         }
     }
-
 }

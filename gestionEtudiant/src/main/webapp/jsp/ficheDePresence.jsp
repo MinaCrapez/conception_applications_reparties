@@ -3,14 +3,6 @@
 <%@ page import= "com.tp2.gestionEtudiant.model.Ligne"%>
 <%@ page import= "java.util.List"%>
 
-<script type="text/javascript"> 
-
-function changeSignature() {
-	$('#nouvSignatureEtudiant').val($'#signatureEtudiant');
-	$('#nouvSignatureProf').val($'#signatureProfesseur');
-    document.getElementById(form_signature).submit();
-}
-</script>
 <html>
     <head>
         <title>Authentification</title>
@@ -42,9 +34,9 @@ function changeSignature() {
                 out.print("<td> Heure fin : " + ligne.getHeureFin()+"</td>");
                 out.print("<td> Matiere : " + ligne.getMatiere()+"</td>");
                 out.print("<td> <label for=\"signature etudiant\"> Signature de l'etudiant </label>");
-                out.print("<td> <input type=\"checkbox\"value="+ligne.getSignatureEtudiant()+"id=\"signatureEtudiant\"  onClick=\"changeSignature();\" > </td>");
+                out.print("<td> <input type=\"checkbox\"value="+ligne.getSignatureEtudiant()+"id=\"signatureEtudiant\"> </td>");
                 out.print("<td> <label for=\"signature professeur\"> Signature du professeur </label>");
-                out.print("<td> <input type=\"checkbox\" value="+ligne.getSignatureProf()+ "id=\"signatureProfesseur\" onClick=\"changeSignature();\"> </td>");
+                out.print("<td> <input type=\"checkbox\" value="+ligne.getSignatureProf()+ "id=\"signatureProfesseur\"> </td>");
 
                 out.print("<td> <form action=\"suppressionLigne\" method=\"post\">");
                 out.print("<input type=\"hidden\" name=\"idFeuille\" value=" +ficheDePresence.getId()+">");
@@ -81,13 +73,5 @@ function changeSignature() {
             </div>
         </form>
         
-        
-         <form action="changementSignature" id="form_signature" method="post">
-         	<input type="hidden" name="idFiche" value=${ficheDePresence.id}>
-            <input type="hidden" name="mailEtudiant" value=${etudiant.email}>
-			<input type="hidden" name="mdpEtudiant" value=${etudiant.mdp}>
-			<input type="hidden" name="nouvSignatureEtudiant" value=false>
-			<input type="hidden" name="nouvSignatureProf" value=false>
-         </form>
     </body>
 </html>

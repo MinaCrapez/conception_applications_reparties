@@ -30,13 +30,13 @@ public class PageAccueilController {
         String password = request.getParameter("mdp");
         
         // on verifie qu'un etudiant avec ces identifiants existe
-        Etudiant etudiant = es.getEtudiantRepository().findByEmailAndMdp(login, password);
+        Etudiant etudiant = es.findByEmailAndMdp(login, password);
         
         if(etudiant != null) { // s'il existe, on envoie vers la page d'accueil
             model.addAttribute("etudiant", etudiant);
             //on recuperer les feuilles de presence associées
             List<FeuilleDePresence> feuillesPres;
-            feuillesPres = fps.getFeuilleDePresenceRepository().findByMailEtudiant(login);
+            feuillesPres = fps.findByMailEtudiant(login);
             model.addAttribute("feuillesPres", feuillesPres);
             return "pageAccueil";
         }
