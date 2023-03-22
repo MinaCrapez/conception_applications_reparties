@@ -6,14 +6,17 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.concurrent.TimeUnit;
 
 import akka.actor.ActorRef;
 import akka.actor.ActorSystem;
+import akka.actor.Inbox;
 import akka.actor.Props;
 import main.java.actor.MapperActor;
 import main.java.actor.ReducerActor;
 import main.java.message.Mapper;
 import main.java.message.Reducer;
+import scala.concurrent.duration.FiniteDuration;
 
 public class AkkaService {
 	
@@ -26,17 +29,18 @@ public class AkkaService {
 	
 	private ActorRef reducer1;
 	private ActorRef reducer2;
+
+	private ActorSystem system;
 	
 	public static AkkaService getAkkaService() {
 		return akkaService;
 	}
 	
 	//methode qui initialise larchitecture (les 3 mappers et 2 reducers)
-	// system. actorOf(props.create....
 	public void create() {
 		// creation archi, 3 mappers et 2 reducers
 		System.out.println("on créé l'architecture");
-		ActorSystem system = ActorSystem.create("MySystem");
+		system = ActorSystem.create("MySystem");
 		mapper1 = system.actorOf(Props.create(MapperActor.class), "mapper1");
 		mapper2 = system.actorOf(Props.create(MapperActor.class), "mapper2");
 		mapper3 = system.actorOf(Props.create(MapperActor.class), "mapper3");
@@ -58,6 +62,7 @@ public class AkkaService {
 			mappers[i].tell(new Mapper(ligne,reducer1,reducer2), ActorRef.noSender());
 			i = (i + 1) % 3;
 		}
+		br.close();
 	}
 	
 	// methode qui retourne le resultat avec un mot
@@ -65,7 +70,11 @@ public class AkkaService {
 	public int compteMot(String mot) {
 		String moitieAlphabet = "abcdefghijklm";
 		String premiereLettre = mot.substring(0,1).toLowerCase();
-		
+
+		Inbox inbox = Inbox.create(system);
+		Object reply = inbox.receive(FiniteDuration.create(5,TimeUnit.SECONDS));
+		// reply : notre compteur ??
+
 		if (moitieAlphabet.contains(premiereLettre)) {
 			return reducer1.getCompteur().get(mot);
 		}

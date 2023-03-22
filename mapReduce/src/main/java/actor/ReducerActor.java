@@ -2,6 +2,8 @@ package main.java.actor;
 
 import java.util.Map;
 
+import akka.actor.ActorSystem;
+import akka.actor.Inbox;
 import akka.actor.UntypedActor;
 import main.java.message.Mapper;
 import main.java.message.Reducer;
@@ -21,6 +23,10 @@ public class ReducerActor  extends UntypedActor {
 		else { // sinon, on l'initialise
 			compteur.put(mot, 1);
 		}
+
+		ActorSystem system = ActorSystem.create("MySystem"); // pas bon : il faudrait recuperer le systeme de akkaservice
+		Inbox inbox = Inbox.create(system);
+		inbox.send( this, compteur); // probleme de type : pas bon
 	}
 
 }

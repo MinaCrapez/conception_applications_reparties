@@ -6,7 +6,7 @@ import main.java.message.Mapper;
 import main.java.message.Reducer;
 
 public class MapperActor extends UntypedActor {
- // changer les noms de var
+
 	@Override
 	public void onReceive(Object message) throws Exception {
 		// prend le message (une ligne), split et envoie les mots aux acteurs reducer
