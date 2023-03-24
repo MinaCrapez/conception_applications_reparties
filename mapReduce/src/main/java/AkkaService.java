@@ -6,6 +6,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 import akka.actor.ActorRef;
@@ -26,17 +27,17 @@ public class AkkaService {
 	private ActorRef mapper1;
 	private ActorRef mapper2;
 	private ActorRef mapper3;
+	private ActorSystem system;
 	
 	private ActorRef reducer1;
 	private ActorRef reducer2;
-
-	private ActorSystem system;
 	
 	public static AkkaService getAkkaService() {
 		return akkaService;
 	}
 	
 	//methode qui initialise larchitecture (les 3 mappers et 2 reducers)
+	// system. actorOf(props.create....
 	public void create() {
 		// creation archi, 3 mappers et 2 reducers
 		System.out.println("on créé l'architecture");
@@ -62,25 +63,29 @@ public class AkkaService {
 			mappers[i].tell(new Mapper(ligne,reducer1,reducer2), ActorRef.noSender());
 			i = (i + 1) % 3;
 		}
-		br.close();
 	}
 	
 	// methode qui retourne le resultat avec un mot
 	// faire send et receive pour avoir les information de Reducer
 	public int compteMot(String mot) {
+		int res;
 		String moitieAlphabet = "abcdefghijklm";
 		String premiereLettre = mot.substring(0,1).toLowerCase();
 
+		// reply = notre compteur ??
 		Inbox inbox = Inbox.create(system);
-		Object reply = inbox.receive(FiniteDuration.create(5,TimeUnit.SECONDS));
-		// reply : notre compteur ??
-
-		if (moitieAlphabet.contains(premiereLettre)) {
-			return reducer1.getCompteur().get(mot);
-		}
-		else {
-			return reducer2.getCompteur().get(mot);
-		}
-		
+		 if (moitieAlphabet.contains(premiereLettre)) { 
+			inbox.send(reducer1,mot);
+			Object compteur = inbox.receive(FiniteDuration.create(5,TimeUnit.SECONDS)); 
+			res = ((Map<String, Integer>) compteur).get(mot);
+		 } 
+		 else { 
+			 inbox.send(reducer2,mot);
+			 Object compteur = inbox.receive(FiniteDuration.create(5,TimeUnit.SECONDS)); 
+			 res = ((Map<String, Integer>) compteur).get(mot);
+		 }
+		 return res;
 	}
 }
+
+
