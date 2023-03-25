@@ -21,4 +21,4 @@ Par la suite, un front en spring sera mis en place.
 
 TODO :
 
-- correction du send et receive pour passer le compteur à l'akka service.
+- ajout du front en spring
