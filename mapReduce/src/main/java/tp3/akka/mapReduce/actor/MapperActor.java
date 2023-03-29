@@ -16,10 +16,10 @@ public class MapperActor extends UntypedActor {
 		for (int i = 0; i < words.length; i++) {
 			String premiereLettre = words[i].substring(0,1).toLowerCase();
 			if (moitieAlphabet.contains(premiereLettre)) {
-				mapper.getReducer1().tell(mapper.getReducer1(), ActorRef.noSender());
+				mapper.getReducer1().tell(new Reducer(words[i]), ActorRef.noSender());
 			}
 			else {
-				mapper.getReducer2().tell(mapper.getReducer2(), ActorRef.noSender());
+				mapper.getReducer2().tell(new Reducer(words[i]), ActorRef.noSender());
 			}
 		}
 	}
