@@ -3,11 +3,11 @@ package tp3.akka.mapReduce.message;
 import java.util.HashMap;
 import java.util.Map;
 
-public class Reducer {
-	public String mot;
-	public Map<String, Integer> compteur;
+public class ReducerMessage {
+	private String mot;
+	private Map<String, Integer> compteur;
 	
-	public Reducer(String mot) {
+	public ReducerMessage(String mot) {
 		this.mot = mot;
 		this.compteur = new HashMap<>();
 	}
