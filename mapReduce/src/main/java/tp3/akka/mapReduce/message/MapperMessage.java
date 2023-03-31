@@ -4,9 +4,9 @@ import akka.actor.ActorRef;
 
 public class MapperMessage {
 	
-	public String ligne;
-	public ActorRef reducer1;
-	public ActorRef reducer2;
+	private String ligne;
+	private ActorRef reducer1;
+	private ActorRef reducer2;
 	
 	public MapperMessage(String ligne, ActorRef reducer1, ActorRef reducer2) {
 		this.ligne = ligne;
