@@ -20,7 +20,5 @@ Le principe du TP est de coder des acteurs et un service AkkaService pour compte
 - allez sur **http://localhost:8080/accueilMapReduce**
 
 TODO :
-
-- corriger l'iteration 2
 - iteration 3, multi systèmes
 - CSS
