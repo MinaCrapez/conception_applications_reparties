@@ -8,18 +8,27 @@
 	<body>
 		<h3> Compter un mot dans un fichier </h3>
 		
-		<form action="comptageDuMot" method="post">
+		<h4>Etape 1 - creation du systeme : </h4>
+		<form action="creationDySysteme" method="post">
+			 <button type="submit"> cr√©er </button>
+		</form>
 		
+		<h4>Etape 2 - Analyse du fichier : </h4>
+		<form action="analyseFichier" method="post">
 			<label for="fichier">Choix du fichier a analyser :</label>
 			<input type="file" id="fichier" name="fichier" accept=".doc, .txt" required>
-       		
-       		<label for="mot">Choix du mot ‡ compter :</label>
+			<button type="submit"> analyser le fichier </button>
+		</form>
+		
+		<h4>Etape 3 - Compter un mot : </h4>
+		<form action="comptageDuMot" method="post">
+			<label for="mot">Choix du mot √† compter :</label>
        		<input type="text" id="mot" name="mot" required>
        		
        		 <button type="submit"> Compter ! </button>
-       </form>
+		</form>
        
-       <p> RÈsultat : Il y a ${occurence} occurence(s) du mot ${mot}.
+       <p> R√©sultat : Il y a ${occurence} occurence(s) du mot ${mot}.
 	</body> 
        
 </html>
